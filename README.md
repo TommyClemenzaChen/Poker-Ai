@@ -1,2 +1,1 @@
-# Poker-Ai
-Poker
+Poker AI project.
