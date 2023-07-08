@@ -60,7 +60,10 @@ flask run -p 5001
 ## API Endpoints
 
 - **POST /new_game**: Starts a new game.
+  curl -X POST http://localhost:8080/new_game
+
 - **GET /state**: Returns the current game state.
+  curl -X GET http://localhost:8080/state
 
 ## Game State
 
@@ -80,3 +83,5 @@ The game state is returned as a JSON object with the following structure:
         // ... more players
     }
 }
+
+
