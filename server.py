@@ -16,7 +16,7 @@ def new_game():
 def state():
     return jsonify(game_state)
 
-@app.route('/play_round', methods=['POST'])
+@app.route('/play_round', methods=['PUT'])
 def play_round():
     global game_state
     game_state = game.play_game(1)
