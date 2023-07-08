@@ -23,21 +23,55 @@ class Player:
         self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
         self.medium_values = ['9', '10']  # consider these as medium value cards
 
+    
+    def count_values(self):
+        values = [card.value for card in self.hand]
+        return {value: values.count(value) for value in values}
+
+    def has_pair(self):
+        counts = self.count_values()
+        return 2 in counts.values()
+
+    def has_two_pair(self):
+        counts = self.count_values()
+        return list(counts.values()).count(2) >= 2
+
+    def has_three_of_a_kind(self):
+        counts = self.count_values()
+        return 3 in counts.values()
+
+    def has_straight(self):
+        values = [self.values.index(card.value) for card in self.hand]
+        values.sort()
+        return max(values) - min(values) == 4 and len(set(values)) == 5
+
+    def calculate_hand_strength(self):
+        if self.has_straight():
+            return 5
+        elif self.has_three_of_a_kind():
+            return 4
+        elif self.has_two_pair():
+            return 3
+        elif self.has_pair():
+            return 2
+        else:
+            return 1  # High card
+    
     def take_action(self, min_bet):
         # If player doesn't have enough chips for the minimum bet, they must fold
         if self.chips < min_bet:
             return Action.FOLD
 
         # Calculate the strength of hand
-        hand_strength = sum(card.value in self.high_values for card in self.hand) + 0.5*sum(card.value in self.medium_values for card in self.hand)
+        hand_strength = self.calculate_hand_strength()
 
         # Based on the strength of hand and position, decide the action
-        if hand_strength >= 1 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Strong hand and not in blinds
+        if hand_strength >= 4 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Strong hand and not in blinds
             return Action.RAISE
-        elif hand_strength >= 0.5 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Medium hand and not in blinds
-            return Action.RAISE
-        else:
+        elif hand_strength >= 2 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Medium hand and not in blinds
             return Action.CALL
+        else:
+            return Action.FOLD
         
 class PokerGame:
     suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
