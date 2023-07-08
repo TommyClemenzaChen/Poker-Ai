@@ -48,13 +48,14 @@ Ensure you have the following installed on your local development machine:
 ## Running the Server
 
 To run the server, execute the following command in the terminal:
+```
 export FLASK_APP=app.py # On Windows, use set FLASK_APP=app.py
 flask run
-
+```
 The server will start on http://localhost:5000. If the port is in use, you can start the server on a different port by specifying the `-p` option, like this:
-
+```
 flask run -p 5001
-
+```
 
 ## API Endpoints
 
