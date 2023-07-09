@@ -83,6 +83,7 @@ The game state is returned as a JSON object with the following structure:
         // ... more players
     }
 }
+```
 
 # React native ui(macOs guide)
 
