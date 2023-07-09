@@ -84,4 +84,28 @@ The game state is returned as a JSON object with the following structure:
     }
 }
 
+# React native ui(macOs guide)
+
+## Prequisites
+Ensure you have this:
+- Node.js
+- Xcode(macOS)
+
+## Install these stuff to use dropdown box and checkbox
+
+```
+npm install --save react-native-material-dropdown
+```
+
+```
+npx expo install expo-checkbox
+```
+
+
+
+
+
+
+
+
 
