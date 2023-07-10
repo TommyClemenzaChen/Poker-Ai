@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, Button} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import Checkbox from 'expo-checkbox';
@@ -46,20 +46,26 @@ const customInput = () => {
             dropdownStyles = {{backgroundColor: 'gray'}}
             placeholder = "Select a card"
           />
-        </View> 
-        <Text style={styles.checkBoxText}>Suited?</Text>
 
-        <View style = {styles.checkBox}>
-          <Checkbox
-            //style = {styles.checkBox}
-            value = {checked}
-            
-            onValueChange = {checkTheBox}
-            
-            
-          />
           
-        </View>      
+          <View style = {styles.standard}>
+            <Text style = {styles.checkBoxText}>Suited?</Text>
+            <Checkbox
+              style = {styles.checkBox}
+              value = {checked} 
+              onValueChange = {checkTheBox} 
+            />
+          </View> 
+
+          <Button 
+            style = {styles.button}
+
+            title = "Submit"
+            onPress = {() => alert("Submitted")}
+          />
+
+
+        </View>
       </View>
     </>
 
@@ -73,33 +79,40 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     
   },
-  checkBox: {
-    //flex: 1,
-    width: 24,
-    height: 24,
+  standard: {
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign : 'center',
-    borderRadius: 4,
+    flexDirection: 'row',
+    marginTop: 20,
+
+  },
+  checkBox: {
+
+    borderRadius: 2,
     borderWidth: 2,
     borderColor: 'coral',
     backgroundColor: 'transparent',
-    marginBottom: 450,
-    marginLeft: 150,
+    marginLeft: 20
 
     
   },
   checkBoxText: {
     //flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
     //textAlign: 'center',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
-    //marginBottom: 8,
-  
-  }
+    marginRight: 0,
+   
+  },
+  button: {
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    marginBottom: 20,
+  },
+
 
 })
 export default customInput;
