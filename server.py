@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from poker import PokerGame, Player
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 game_state = {}
 
 @app.route('/new_game', methods=['POST'])
