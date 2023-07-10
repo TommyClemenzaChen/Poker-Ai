@@ -20,9 +20,10 @@ class Player:
         self.hand = []
         self.chips = chips
         self.position = None
+        self.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+
         self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
         self.medium_values = ['9', '10']  # consider these as medium value cards
-
     
     def count_values(self):
         values = [card.value for card in self.hand]
@@ -73,7 +74,7 @@ class Player:
         else:
             return Action.FOLD
         
-class PokerGame:
+class PokerFlop:
     suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
     values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
@@ -84,7 +85,7 @@ class PokerGame:
             'rounds_played': 0,
             'current_player': None,
             'pot': 0,
-            'player_states': {player.name: {'chips': player.chips, 'hand': [], 'action': None} for player in self.players}
+            'player_states': {player.name: {'chips': player.chips, 'hand': [], 'action': None, 'position': None} for player in self.players}
         }
 
     def deal_cards(self):
@@ -99,7 +100,6 @@ class PokerGame:
         self.deal_cards()
         self.set_positions()
 
-        pot = 0
         min_bet = 10  # This is the big blind
         small_blind_bet = 5  # This is the small blind
 
@@ -107,18 +107,16 @@ class PokerGame:
 
         # The player in the small blind position must post the small blind
         players_in_round[0].chips -= small_blind_bet
-        pot += small_blind_bet
         self.state['player_states'][players_in_round[0].name]['chips'] = players_in_round[0].chips
-        self.state['pot'] = pot
+        self.state['pot'] += small_blind_bet
 
         # The player in the big blind position must post the big blind
         players_in_round[1].chips -= min_bet
-        pot += min_bet
         self.state['player_states'][players_in_round[1].name]['chips'] = players_in_round[1].chips
-        self.state['pot'] = pot
+        self.state['pot'] += min_bet
 
-        # Start from the player next to big blind
-        for player in players_in_round[2:]:
+        # Players decide their action
+        for player in players_in_round:
             print(f"{player.name}'s hand: {player.hand[0]}, {player.hand[1]} at {player.position}")
             action = player.take_action(min_bet)
             print(f"{player.name} decided to {action}")
@@ -126,58 +124,7 @@ class PokerGame:
             self.state['current_player'] = player.name
             self.state['player_states'][player.name]['hand'] = [str(card) for card in player.hand]
             self.state['player_states'][player.name]['action'] = action.name
-
-            if action == Action.FOLD:
-                players_in_round.remove(player)
-                if len(players_in_round) <= 2:  # if only the blind players are left, they win
-                    break
-                continue
-
-            if action == Action.CALL:
-                bet = min_bet
-            elif action == Action.RAISE:
-                bet = 2 * min_bet
-                min_bet = bet
-
-            player.chips -= bet
-            pot += bet
-            self.state['player_states'][player.name]['chips'] = player.chips
-            self.state['pot'] = pot
-
-        # Now the blind players take their decisions
-        for player in players_in_round[:2]:
-            print(f"{player.name}'s hand: {player.hand[0]}, {player.hand[1]} at {player.position}")
-            action = player.take_action(min_bet)
-            print(f"{player.name} decided to {action}")
-
-            self.state['current_player'] = player.name
-            self.state['player_states'][player.name]['hand'] = [str(card) for card in player.hand]
-            self.state['player_states'][player.name]['action'] = action.name
-
-            if action == Action.FOLD:
-                players_in_round.remove(player)
-                if len(players_in_round) == 1:  # if only one player is left, they win
-                    break
-                continue
-
-            if action == Action.CALL:
-                bet = min_bet
-            elif action == Action.RAISE:
-                bet = 2 * min_bet
-                min_bet = bet
-
-            player.chips -= bet
-            pot += bet
-            self.state['player_states'][player.name]['chips'] = player.chips
-            self.state['pot'] = pot
-
-        if players_in_round:  # only if there are remaining players
-            winner = players_in_round[0]
-            print(f"{winner.name} wins the pot of {pot} chips!")
-            winner.chips += pot
-            self.state['player_states'][winner.name]['chips'] = winner.chips
-
-        print("----")
+            self.state['player_states'][player.name]['position'] = player.position
 
         self.state['rounds_played'] += 1
 
@@ -190,18 +137,6 @@ class PokerGame:
         for player, position in zip(self.players, positions):
             player.position = position  # Assign position as a string.
 
-
-    def find_winner(self, players_in_round):
-        # Finds the winner among the players still in the round.
-        best_player = max(players_in_round, key=lambda player: self.values.index(player.hand[0].value))
-        return best_player
-    
-    def play_game(self, num_rounds):
-        for _ in range(num_rounds):
-            self.state = self.play_round()
-        return self.state
-        
-
 players = [Player(f'Player {i}', 1000) for i in range(1, 7)]
-game = PokerGame(players)
-game_state = game.play_game(2)
+game = PokerFlop(players)
+game_state = game.play_round()
