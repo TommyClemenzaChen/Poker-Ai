@@ -6,7 +6,9 @@ import Checkbox from 'expo-checkbox';
 
 const customInput = () => {
   
-  const [selected, setSelected] = React.useState("")
+  const [card1, setCard1] = React.useState("")
+  const [card2, setCard2] = React.useState("")
+
   const [checked, checkTheBox] = React.useState(false)
 
   //Possible inputs for drop down box
@@ -32,17 +34,17 @@ const customInput = () => {
 
         <View style = {{paddingHorizontal: 20, paddingVertical: 50, flex: 1}}>
           <Text style = {{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>Select your cards</Text>
+
           <SelectList
             data = {data} 
-            setSelected = {setSelected}
+            setSelected = {setCard1}
             dropdownStyles = {{backgroundColor: 'gray'}}
             placeholder = "Select a card"
-
           />
 
           <SelectList
             data = {data} 
-            setSelected = {setSelected}
+            setSelected = {setCard2}
             dropdownStyles = {{backgroundColor: 'gray'}}
             placeholder = "Select a card"
           />
@@ -59,11 +61,17 @@ const customInput = () => {
 
           <Button 
             style = {styles.button}
-
             title = "Submit"
-            onPress = {() => alert("Submitted")}
-          />
+            onPress = {() => 
+            alert(
+              data.find((item) => item.key === card1)?.value + " " + 
+              data.find((item) => item.key === card2)?.value + " " + 
+              checked
+            )
+            }
+            
 
+          />
 
         </View>
       </View>

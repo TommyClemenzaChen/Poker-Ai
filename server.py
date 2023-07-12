@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
-from poker import PokerFlop, Player, get_action_from_input
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
+from poker import PokerFlop, Player, get_action_from_input
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS
 game_state = {}
 
 @app.route('/get_optimal_action', methods=['POST'])
