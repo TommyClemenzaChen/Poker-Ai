@@ -1,5 +1,6 @@
 import random
 from enum import Enum
+from flask import abort 
 
 class Action(Enum):
     FOLD = 0
@@ -25,54 +26,78 @@ class Player:
         self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
         self.medium_values = ['9', '10']  # consider these as medium value cards
     
+    def set_hand(self, hand):
+        self.hand = hand
+
+    def set_position(self, position):
+        self.position = position
+
     def count_values(self):
         values = [card.value for card in self.hand]
         return {value: values.count(value) for value in values}
 
+    def has_high_card(self):
+        return any(card.value in self.high_values for card in self.hand)
+    
+    def has_medium_card(self):
+        return any(card.value in self.medium_values for card in self.hand)
+    
+    def has_low_card(self):
+        return any(card.value in self.low_values for card in self.hand)
+    
     def has_pair(self):
-        counts = self.count_values()
-        return 2 in counts.values()
+        values = [card.value for card in self.hand]
+        return len(set(values)) == 1  # Pair has two same value cards
 
-    def has_two_pair(self):
-        counts = self.count_values()
-        return list(counts.values()).count(2) >= 2
+    def is_suited(self):
+        suits = [card.suit for card in self.hand]
+        return len(set(suits)) == 1  # Suited if all suits are the same
 
-    def has_three_of_a_kind(self):
-        counts = self.count_values()
-        return 3 in counts.values()
-
-    def has_straight(self):
+    def has_potential_straight(self):
         values = [self.values.index(card.value) for card in self.hand]
-        values.sort()
-        return max(values) - min(values) == 4 and len(set(values)) == 5
+        return max(values) - min(values) == 1  # Potential straight if values are consecutive
 
     def calculate_hand_strength(self):
-        if self.has_straight():
-            return 5
-        elif self.has_three_of_a_kind():
-            return 4
-        elif self.has_two_pair():
-            return 3
-        elif self.has_pair():
-            return 2
+        # Calculate the base strength of hand
+        if self.has_pair():
+            hand_strength = 3  # Pair
+        elif self.has_high_card():
+            hand_strength = 2  # High card
+        elif self.has_medium_card():
+            hand_strength = 1  # Medium card
         else:
-            return 1  # High card
-    
+            hand_strength = 0  # Low card
+
+        # If hand is suited or has potential for straight, increase hand strength by 1
+        if self.is_suited() or self.has_potential_straight():
+            hand_strength += 1
+        
+        return hand_strength
+
     def take_action(self, min_bet):
         # If player doesn't have enough chips for the minimum bet, they must fold
         if self.chips < min_bet:
             return Action.FOLD
 
-        # Calculate the strength of hand
         hand_strength = self.calculate_hand_strength()
 
         # Based on the strength of hand and position, decide the action
-        if hand_strength >= 4 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Strong hand and not in blinds
-            return Action.RAISE
-        elif hand_strength >= 2 and self.position != 'Small Blind' and self.position != 'Big Blind':  # Medium hand and not in blinds
-            return Action.CALL
-        else:
-            return Action.FOLD
+        if self.position in ['Small Blind', 'Big Blind', 'UTG']:  # Early position
+            if hand_strength >= 2:  # Strong hand
+                return Action.RAISE
+            else:
+                return Action.FOLD
+        elif self.position in ['UTG+1', 'UTG+2']:  # Middle position
+            if hand_strength >= 1:  # Medium or strong hand
+                return Action.CALL
+            else:
+                return Action.FOLD
+        else:  # Late position
+            if hand_strength > 0:  # Medium or strong hand
+                return Action.CALL
+            else:  # Low card
+                return Action.FOLD
+
         
 class PokerFlop:
     suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
@@ -136,7 +161,55 @@ class PokerFlop:
         positions = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'Dealer']
         for player, position in zip(self.players, positions):
             player.position = position  # Assign position as a string.
+    
+    def get_optimal_action(self, player_name, min_bet):
+        player = next(player for player in self.players if player.name == player_name)
+        return player.take_action(min_bet)
 
-players = [Player(f'Player {i}', 1000) for i in range(1, 7)]
-game = PokerFlop(players)
-game_state = game.play_round()
+def player_action(player_name, hand, position, min_bet):
+    player = Player(player_name)
+    player.set_hand(hand)  # Set player's hand. Now `hand` is a list of `Card` objects
+    player.set_position(position)  # Set player's position
+
+    game = PokerFlop([player])  # Create a game with just the one player
+
+    optimal_action = game.get_optimal_action(player_name, min_bet)  # Get optimal action
+
+    game_state = game.state
+    game_state['current_player'] = player_name
+    game_state['player_states'][player_name]['hand'] = [str(card) for card in player.hand]
+    game_state['player_states'][player_name]['position'] = position
+    game_state['player_states'][player_name]['action'] = optimal_action.name
+
+    return game_state, optimal_action
+
+def get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet):
+    # Check if the player is trying to enter two cards that are the same and suited
+    if card1_value == card2_value and are_suited:
+        abort(400, description="Invalid input: You cannot have two identical cards that are suited.")
+
+    # Create Card objects for the hand
+    card1 = Card('Spades', card1_value)
+    card2 = Card('Clubs', card2_value)
+
+    if are_suited:
+        # If the cards are suited, they should have the same suit
+        card2.suit = 'Spades'
+
+    # Call the player_action function
+    game_state, optimal_action = player_action(player_name, [card1, card2], position, min_bet)
+
+    return game_state, optimal_action
+
+
+# players = [Player(f'Player {i}', 1000) for i in range(1, 7)]
+# game = PokerFlop(players)
+# game_state = game.play_round()
+
+# player_name = 'Player 1'
+# game_state, optimal_action = player_action(player_name, [('2', 'Clubs'), ('3', 'Spades')], 'Small Blind', 10)
+# #print the player_state 
+# print(game_state['player_states'][player_name])
+# print(optimal_action)
+
+# print(get_action_from_input('Player 1', 'K', 'K', False, 'Small Blind', 10))

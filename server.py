@@ -1,28 +1,25 @@
 from flask import Flask, request, jsonify
-from poker import PokerGame, Player
+from poker import PokerFlop, Player, get_action_from_input
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 game_state = {}
 
-@app.route('/new_game', methods=['POST'])
-def new_game():
-    players = [Player('Player 1', 2000), Player('Player 2', 1500), Player('Player 3', 1500), Player('Player 4', 1500), Player('Player 5', 1500), Player('Player 6', 1500)]
-    global game_state
-    game = PokerGame(players)
-    game_state = game.play_game(1)  # Assuming play_game() returns a game state now
-    return 'Game started!'
+@app.route('/get_optimal_action', methods=['POST'])
+def get_optimal_action_route():
+    data = request.get_json()
 
-@app.route('/state', methods=['GET'])
-def state():
-    return jsonify(game_state)
+    player_name = data['player_name']
+    card1_value = data['card1_value']
+    card2_value = data['card2_value']
+    are_suited = data['are_suited']
+    position = data['position']
+    min_bet = data['min_bet']
 
-@app.route('/play_round', methods=['PUT'])
-def play_round():
-    global game_state
-    game_state = game.play_game(1)
-    return 'Round played!'
+    game_state, optimal_action = get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet)
 
-if __name__ == "__main__":
+    return jsonify({'optimal_action': optimal_action.name})
+
+if __name__ == '__main__':
     app.run(debug=True)
