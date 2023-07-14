@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import Checkbox from 'expo-checkbox';
@@ -32,22 +32,28 @@ const customInput = () => {
     <>
       <View style = {styles.container}>
 
-        <View style = {{paddingHorizontal: 20, paddingVertical: 50, flex: 1}}>
-          <Text style = {{fontSize: 20, fontWeight: 'bold', textAlign: 'center'}}>Select your cards</Text>
+        <Text style = {{fontSize: 25, fontWeight: 'bold', textAlign: 'center', marginTop: 40}}>
+          Select your cards
+        </Text>
 
-          <SelectList
-            data = {data} 
-            setSelected = {setCard1}
-            dropdownStyles = {{backgroundColor: 'gray'}}
-            placeholder = "Select a card"
-          />
+        <View style = {{paddingHorizontal: 20, paddingVertical: 30, flex: 1}}>
+          <View style = {styles.dropdownWrapper}>
+            <SelectList
+              data = {data} 
+              setSelected = {setCard1}
+              dropdownStyles = {{backgroundColor: 'gray'}}
+              placeholder = "Select a card"
+            />
+          </View>
 
-          <SelectList
-            data = {data} 
-            setSelected = {setCard2}
-            dropdownStyles = {{backgroundColor: 'gray'}}
-            placeholder = "Select a card"
-          />
+          <View style = {styles.dropdownWrapper}>
+            <SelectList
+              data = {data} 
+              setSelected = {setCard2}
+              dropdownStyles = {{backgroundColor: 'gray'}}
+              placeholder = "Select a card"
+            />
+          </View>
 
           
           <View style = {styles.standard}>
@@ -59,19 +65,23 @@ const customInput = () => {
             />
           </View> 
 
-          <Button 
-            style = {styles.button}
-            title = "Submit"
-            onPress = {() => 
-            alert(
-              data.find((item) => item.key === card1)?.value + " " + 
-              data.find((item) => item.key === card2)?.value + " " + 
-              checked
-            )
-            }
-            
+          <View style = {styles.standard}>
+            <TouchableOpacity
+              style = {styles.button}
+                
+              onPress = {() => 
+                alert(
+                  data.find((item) => item.key === card1)?.value + "," + 
+                  data.find((item) => item.key === card2)?.value + "\n" + 
+                  (checked ? "suited" : "not suited")
+                )
+              }
+            >
+              <Text style = {{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>Submit</Text>
+            </TouchableOpacity>
+          </View>
 
-          />
+
 
         </View>
       </View>
@@ -91,7 +101,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 30,
 
   },
   checkBox: {
@@ -119,8 +129,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 30,
     marginBottom: 20,
-  },
 
+  },
+  dropdownWrapper: {
+    marginTop: 20,
+  }
 
 })
 export default customInput;
