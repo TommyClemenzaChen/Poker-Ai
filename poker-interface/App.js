@@ -6,7 +6,7 @@ import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 
 
-// Sending things to the backend
+//Send a post request to the backend
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 })
@@ -22,15 +22,29 @@ const handleSubmit = async (card1, card2, checked) => {
 
   })
   console.log(res.data)
-  if(res = 200){
+  showOptimalAction(res.data)
+
+  if(res.status === 200){
     console.log("Success")
   }
   else{
     console.log("Failure")
   }
+}
 
+const showOptimalAction = (action) =>{
+  
+  alert(action["optimal_action"])
 
 }
+
+// const get_optimal_action = async () => {
+//   const res = await api.post('/get_optimal_action', {
+    
+//   })
+// }
+
+
 
 const customInput = () => {
   
@@ -41,7 +55,7 @@ const customInput = () => {
 
   //Possible inputs for drop down box
   const data = [
-    {key: '1', value: 'A'},
+    {key: 'A', value: 'A'},
     {key: '2', value: '2'},
     {key: '3', value: '3'},
     {key: '4', value: '4'},
@@ -51,10 +65,13 @@ const customInput = () => {
     {key: '8', value: '8'},
     {key: '9', value: '9'},
     {key: '10', value: '10'},
-    {key: '11', value: 'Jack'},
-    {key: '12', value: 'Queen'},
-    {key: '13', value: 'King'},
+    {key: 'J', value: 'Jack'},
+    {key: 'Q', value: 'Queen'},
+    {key: 'K', value: 'King'},
+
   ];
+
+  
   const handlePress = () => {
     console.log('Submit');
     // Add logic for the "Submit" button here -- route backend
