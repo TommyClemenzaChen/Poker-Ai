@@ -3,6 +3,34 @@ import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import Checkbox from 'expo-checkbox';
+import axios from 'axios';
+
+
+// Sending things to the backend
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:5000'
+})
+
+const handleSubmit = async (card1, card2, checked) => {
+  const res = await api.post('/get_optimal_action', {
+    card1_value: card1,
+    card2_value: card2,
+    are_suited: checked,
+    player_name : 'bob',
+    position : 'UTG',
+    min_bet : 10,
+
+  })
+  console.log(res.data)
+  if(res = 200){
+    console.log("Success")
+  }
+  else{
+    console.log("Failure")
+  }
+
+
+}
 
 const customInput = () => {
   
@@ -27,12 +55,24 @@ const customInput = () => {
     {key: '12', value: 'Queen'},
     {key: '13', value: 'King'},
   ];
+  const handlePress = () => {
+    console.log('Submit');
+    // Add logic for the "Submit" button here -- route backend
+    alert(
+      data.find((item) => item.key === card1)?.value + "," + 
+      data.find((item) => item.key === card2)?.value + "\n" + 
+      (checked ? "suited" : "not suited")
+    )
+
+    handleSubmit(card1, card2, checked)
+
+  };
 
   return (
     <>
       <View style = {styles.container}>
 
-        <Text style = {{fontSize: 25, fontWeight: 'bold', textAlign: 'center', marginTop: 40}}>
+        <Text style = {styles.title}>
           Select your cards
         </Text>
 
@@ -65,29 +105,20 @@ const customInput = () => {
             />
           </View> 
 
+          
           <View style = {styles.standard}>
             <TouchableOpacity
               style = {styles.button}
                 
-              onPress = {() => 
-                alert(
-                  data.find((item) => item.key === card1)?.value + "," + 
-                  data.find((item) => item.key === card2)?.value + "\n" + 
-                  (checked ? "suited" : "not suited")
-                )
-              }
+              onPress = {handlePress}
             >
               <Text style = {{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>Submit</Text>
             </TouchableOpacity>
           </View>
 
-
-
         </View>
       </View>
     </>
-
-
   )
 }
 
@@ -133,9 +164,13 @@ const styles = StyleSheet.create({
   },
   dropdownWrapper: {
     marginTop: 20,
-  }
+  },
+  title: {
+    fontSize: 25, 
+    fontWeight: 'bold', 
+    textAlign: 'center', 
+    marginTop: 40,
+  },
 
 })
 export default customInput;
-
-
