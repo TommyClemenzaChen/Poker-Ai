@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 
 import Checkbox from 'expo-checkbox';
@@ -11,13 +11,13 @@ const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 })
 
-const handleSubmit = async (card1, card2, checked) => {
+const handleSubmit = async (card1, card2, checked, position) => {
   const res = await api.post('/get_optimal_action', {
     card1_value: card1,
     card2_value: card2,
     are_suited: checked,
     player_name : 'bob',
-    position : 'UTG',
+    position : position,
     min_bet : 10,
 
   })
@@ -71,19 +71,24 @@ const customInput = () => {
 
   ];
 
-  
+  //Function to deal with button press
   const handlePress = () => {
     console.log('Submit');
+    
     // Add logic for the "Submit" button here -- route backend
     alert(
       data.find((item) => item.key === card1)?.value + "," + 
       data.find((item) => item.key === card2)?.value + "\n" + 
+      position + "\n" +
       (checked ? "suited" : "not suited")
     )
-
-    handleSubmit(card1, card2, checked)
-
+    
+    handleSubmit(card1, card2, checked, position)
   };
+
+  const [position, setPosition] = React.useState("")
+  const positionData = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'Dealer'];
+
 
   return (
     <>
@@ -131,6 +136,18 @@ const customInput = () => {
             >
               <Text style = {{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>Submit</Text>
             </TouchableOpacity>
+          </View>
+          
+          
+          <View>
+            {positionData.map(pos => (
+              <Button
+                key={pos}
+                title={pos}
+                onPress={() => setPosition(pos)}
+                checked={pos === setPosition}
+              />
+            ))}
           </View>
 
         </View>
