@@ -26,6 +26,7 @@ class Player:
         self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
         self.medium_values = ['9', '10']  # consider these as medium value cards
         self.low_values = ['2', '3', '4', '5', '6', '7', '8']
+
     def set_hand(self, hand):
         self.hand = hand
 
@@ -91,31 +92,44 @@ class Player:
 
         return hand_strength
 
-    def take_action(self, min_bet):
+    def take_action(self, min_bet, pot_size):
         # If player doesn't have enough chips for the minimum bet, they must fold
         if self.chips < min_bet:
             return Action.FOLD
 
         hand_strength = self.calculate_hand_strength()
+        # Calculate the pot odds
+        pot_odds = min_bet / pot_size if pot_size != 0 else 1
 
         # Based on the strength of hand and position, decide the action
         if self.position in ['Small Blind', 'Big Blind', 'UTG']:  # Early position
             if hand_strength >= 7:  # Strong hand
                 return Action.RAISE
             else:
-                return Action.FOLD
+                # If pot odds are high, consider calling even with a weaker hand
+                if pot_odds > 0.5:
+                    return Action.CALL
+                else:
+                    return Action.FOLD
         elif self.position in ['UTG+1', 'UTG+2']:  # Middle position
             if hand_strength >= 6:  # Medium or strong hand
                 return Action.CALL
             else:
-                return Action.FOLD
+                # If pot odds are high, consider calling even with a weaker hand
+                if pot_odds > 0.5:
+                    return Action.CALL
+                else:
+                    return Action.FOLD
         else:  # Late position
             if hand_strength > 4:  # Medium or strong hand
                 return Action.CALL
             else:  # Low card
-                return Action.FOLD
+                # If pot odds are high, consider calling even with a weaker hand
+                if pot_odds > 0.5:
+                    return Action.CALL
+                else:
+                    return Action.FOLD
 
-        
 class PokerFlop:
     suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
     values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -160,7 +174,7 @@ class PokerFlop:
         # Players decide their action
         for player in players_in_round:
             print(f"{player.name}'s hand: {player.hand[0]}, {player.hand[1]} at {player.position}")
-            action = player.take_action(min_bet)
+            action = player.take_action(min_bet, self.state['pot'])
             print(f"{player.name} decided to {action}")
 
             self.state['current_player'] = player.name
@@ -181,7 +195,7 @@ class PokerFlop:
     
     def get_optimal_action(self, player_name, min_bet):
         player = next(player for player in self.players if player.name == player_name)
-        return player.take_action(min_bet)
+        return player.take_action(min_bet, self.state['pot'])
 
 def player_action(player_name, hand, position, min_bet):
     player = Player(player_name)
@@ -217,20 +231,3 @@ def get_action_from_input(player_name, card1_value, card2_value, are_suited, pos
     game_state, optimal_action = player_action(player_name, [card1, card2], position, min_bet)
 
     return game_state, optimal_action
-
-
-# players = [Player(f'Player {i}', 1000) for i in range(1, 7)]
-# game = PokerFlop(players)
-# game_state = game.play_round()
-
-# player_name = 'Player 1'
-# game_state, optimal_action = player_action(player_name, [('2', 'Clubs'), ('3', 'Spades')], 'Small Blind', 10)
-# #print the player_state 
-# print(game_state['player_states'][player_name])
-# print(optimal_action)
-
-# print(get_action_from_input('Player 1', 'K', 'K', False, 'Small Blind', 10))
-    
-    
-    
-    
