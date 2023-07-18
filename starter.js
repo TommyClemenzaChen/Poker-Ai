@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const StarterPage = () => {
+  const navigation = useNavigation();
   const handlePlayButton = () => {
-    console.log('Play');
-    // Add logic for the "Play" button here -- route backend 
+    console.log('Study');
+    navigation.navigate('StudyPage');
   };
 
   const handleTrainButton = () => {
