@@ -93,12 +93,15 @@ const customInput = () => {
   return (
     <>
       <View style = {styles.container}>
-
         <Text style = {styles.title}>
+          Study Mode
+        </Text>
+
+        <Text style = {styles.subtitle}>
           Select your cards
         </Text>
 
-        <View style = {{paddingHorizontal: 20, paddingVertical: 30, flex: 1}}>
+        <View style = {{paddingHorizontal: 20, paddingVertical: 10, flex: 1}}>
           <View style = {styles.dropdownWrapper}>
             <SelectList
               data = {data} 
@@ -119,7 +122,7 @@ const customInput = () => {
 
           
           <View style = {styles.standard}>
-            <Text style = {styles.checkBoxText}>Suited?</Text>
+            <Text style = {styles.checkBoxText}>Suited</Text>
             <Checkbox
               style = {styles.checkBox}
               value = {checked} 
@@ -142,6 +145,7 @@ const customInput = () => {
           <View>
             {positionData.map(pos => (
               <Button
+                style = {styles.circlebutton}
                 key={pos}
                 title={pos}
                 onPress={() => setPosition(pos)}
@@ -149,6 +153,7 @@ const customInput = () => {
               />
             ))}
           </View>
+          
 
         </View>
       </View>
@@ -175,14 +180,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'coral',
     backgroundColor: 'transparent',
-    marginLeft: 20
+    marginLeft: 5
 
     
   },
   checkBoxText: {
-    //flex: 1,
+
     backgroundColor: 'white',
-    //textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
     marginRight: 0,
@@ -197,14 +201,31 @@ const styles = StyleSheet.create({
 
   },
   dropdownWrapper: {
-    marginTop: 20,
+    marginTop: 10,
   },
   title: {
-    fontSize: 25, 
+    fontSize: 30, 
     fontWeight: 'bold', 
     textAlign: 'center', 
     marginTop: 40,
   },
+  subtitle: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: 20
+
+  },
+  circlebutton: {
+      borderWidth:1,
+      borderColor:'rgba(0,0,0,0.2)',
+      alignItems:'center',
+      justifyContent:'center',
+      width:100,
+      height:100,
+      backgroundColor:'#fff',
+      borderRadius:50,
+  },
 
 })
+
 export default customInput;
