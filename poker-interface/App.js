@@ -87,7 +87,7 @@ const customInput = () => {
   };
 
   const [position, setPosition] = React.useState("")
-  const positionData = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'Dealer'];
+  const positionData = ['SB', 'BB', '1', '2', '3', 'D'];
 
 
   return (
@@ -103,31 +103,48 @@ const customInput = () => {
 
         <View style = {{paddingHorizontal: 20, paddingVertical: 10, flex: 1}}>
           <View style = {styles.dropdownWrapper}>
-            <SelectList
-              data = {data} 
-              setSelected = {setCard1}
-              dropdownStyles = {{backgroundColor: 'gray'}}
-              placeholder = "Select a card"
-            />
-          </View>
+            <View style = {{backgroundColor: 'gray', borderRadius: 10}}>
+              <SelectList
+                data = {data} 
+                setSelected = {setCard1}
+                
+                dropdownStyles = {{
+                  backgroundColor: 'gray', 
+                }}
+                placeholder = "Select a card"
+              />
+            </View>
 
-          <View style = {styles.dropdownWrapper}>
-            <SelectList
-              data = {data} 
-              setSelected = {setCard2}
-              dropdownStyles = {{backgroundColor: 'gray'}}
-              placeholder = "Select a card"
-            />
+            <View style = {{backgroundColor: 'gray', borderRadius: 10}}>
+              <SelectList
+                data = {data} 
+                setSelected = {setCard2}
+                dropdownStyles = {{
+                  backgroundColor: 'gray', 
+                  
+                }}
+                placeholder = "Select a card"
+              />
+            </View>
           </View>
 
           
           <View style = {styles.standard}>
-            <Text style = {styles.checkBoxText}>Suited</Text>
-            <Checkbox
-              style = {styles.checkBox}
-              value = {checked} 
-              onValueChange = {checkTheBox} 
-            />
+            
+            <TouchableOpacity
+              
+              style = {{
+                backgroundColor: checked ? 'green' : 'gray',
+                borderRadius: 10,
+                width: 315,
+                height: 50,
+              }}
+              onPress = {() => checkTheBox(!checked)}
+              >
+                <Text style={{fontSize: 20, fontWeight: 'bold', textAlign: 'center', paddingTop: 10}}>Suited</Text>
+              
+              </TouchableOpacity>
+               
           </View> 
 
           
@@ -142,15 +159,27 @@ const customInput = () => {
           </View>
           
           
-          <View>
-            {positionData.map(pos => (
-              <Button
-                style = {styles.circlebutton}
-                key={pos}
-                title={pos}
-                onPress={() => setPosition(pos)}
-                checked={pos === setPosition}
-              />
+          <View style = {{flexDirection: 'row'}} >
+            {positionData.map((pos, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  margin: 10,
+                  backgroundColor: 'gray',
+                  borderRadius: 50,
+                  paddingVertical: 15,
+                  paddingHorizontal: 15,
+                  width: 50,
+                  height: 50,
+                  justifyContent: 'center',
+                }}
+                onPress={() => {
+                  setPosition(pos);
+                  console.log(pos);
+                }}
+              >
+                <Text style={{fontSize: 15, fontWeight: 'bold', textAlign: 'center'}}>{pos}</Text>
+              </TouchableOpacity>
             ))}
           </View>
           
@@ -164,7 +193,7 @@ const customInput = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#171717',
     
   },
   standard: {
@@ -174,24 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
 
   },
-  checkBox: {
-
-    borderRadius: 2,
-    borderWidth: 2,
-    borderColor: 'coral',
-    backgroundColor: 'transparent',
-    marginLeft: 5
-
-    
-  },
-  checkBoxText: {
-
-    backgroundColor: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginRight: 0,
-   
-  },
+  
   button: {
     backgroundColor: 'orange',
     borderRadius: 10,
@@ -201,15 +213,24 @@ const styles = StyleSheet.create({
 
   },
   dropdownWrapper: {
-    marginTop: 10,
+    margin: 10,
+    //spaceBetween: 10,
+    
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+    
+    
   },
   title: {
+    color: 'white',
     fontSize: 30, 
     fontWeight: 'bold', 
     textAlign: 'center', 
     marginTop: 40,
   },
   subtitle: {
+    color: 'white',
     fontSize: 20,
     textAlign: 'center',
     marginTop: 20
