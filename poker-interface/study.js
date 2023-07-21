@@ -4,7 +4,6 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import AppNavigator from './app_navigator';
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 });
