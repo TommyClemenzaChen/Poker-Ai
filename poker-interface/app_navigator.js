@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import StarterPage from './StarterPage';
-import customInput from './customInput';
+import StarterPage from './starter';
+import customInput from './App';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +14,7 @@ const AppNavigator = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="CustomInput"
+        name="StudyPage"
         component={customInput}
         options={{ headerShown: false }}
       />
