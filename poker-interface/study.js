@@ -218,9 +218,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    position: 'absolute',
-    top: 10,
-    left: 10,
+    alignSelf: 'center',
+    marginTop: 10,
   },
   backButtonText: {
     fontSize: 18,
