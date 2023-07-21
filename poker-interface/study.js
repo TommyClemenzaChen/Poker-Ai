@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import Checkbox from 'expo-checkbox';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import AppNavigator from './app_navigator';
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 });
-
+const navigation = useNavigation(); 
 const handleSubmit = async (card1, card2, checked, position) => {
   const res = await api.post('/get_optimal_action', {
     card1_value: card1,
@@ -28,11 +28,15 @@ const handleSubmit = async (card1, card2, checked, position) => {
   }
 };
 
+const handleBackButton = () => {
+  navigation.navigate('StarterPage')
+}
+
 const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
 };
 
-const customInput = ({navigation}) => {
+const customInput = () => {
 
 
   const [card1, setCard1] = React.useState('');
@@ -134,12 +138,9 @@ const customInput = ({navigation}) => {
           ))}
         </View>
 
-        <View style= {styles.container} >
-          <Button
-            title = "Back"
-            onPress={() => navigation.navigate("StarterPage")} 
-            />
-        </View>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
           <Text style={styles.submitButtonText}>Submit</Text>
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   backButton: {
-    backgroundColor: 'blue ',
+    backgroundColor: 'orange',
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 30,
