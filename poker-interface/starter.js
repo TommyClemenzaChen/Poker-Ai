@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // <-- Import useNavigation
-
 const StarterPage = () => {
   const navigation = useNavigation(); // <-- Get the navigation object
 
