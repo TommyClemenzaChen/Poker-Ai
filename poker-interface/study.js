@@ -8,7 +8,6 @@ import AppNavigator from './app_navigator';
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 });
-const navigation = useNavigation(); 
 const handleSubmit = async (card1, card2, checked, position) => {
   const res = await api.post('/get_optimal_action', {
     card1_value: card1,
@@ -28,9 +27,7 @@ const handleSubmit = async (card1, card2, checked, position) => {
   }
 };
 
-const handleBackButton = () => {
-  navigation.navigate('StarterPage')
-}
+
 
 const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
@@ -38,13 +35,16 @@ const showOptimalAction = (action) => {
 
 const customInput = () => {
 
-
+  const navigation = useNavigation(); 
   const [card1, setCard1] = React.useState('');
   const [card2, setCard2] = React.useState('');
   const [checked, checkTheBox] = React.useState(false);
   const [position, setPosition] = React.useState('');
   const positionData = ['SB', 'BB', '1', '2', '3', 'D'];
-
+  
+  const handleBackButton = () => {
+    navigation.navigate("StarterPage"); 
+  }
   const handlePress = () => {
     console.log('Submit');
 
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   backButton: {
-    backgroundColor: 'orange',
+    backgroundColor: 'red',
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 30,
