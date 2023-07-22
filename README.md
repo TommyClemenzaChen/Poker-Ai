@@ -1,89 +1,53 @@
 # Poker-Ai
 Poker
-# Flask-Poker
 
-Flask-Poker is a simple poker game simulation built with Python and Flask. It allows for the simulation of poker rounds between AI players, with the ability to view the current game state via a REST API.
 
-This project is for development purposes and provides a simplified structure for building a poker game simulation.
+## Files
+poker.py: This is the main file that contains the logic of the poker game and the poker bot. The PokerFlop class represents a game of poker, and the Player class represents a player in the game. The PokerFlop class includes methods for calculating the strength of a hand and determining the optimal action for a player. The Player class includes methods for setting a player's hand and position.
 
-## Prerequisites
+server.py: This file sets up a Flask web server that serves as the interface between the poker bot and the players. The server receives HTTP requests from the players, passes the relevant information to the poker bot, and sends back the bot's decisions as HTTP responses.
 
-Ensure you have the following installed on your local development machine:
-
-- Python 3.x
-- pip (Python package manager)
-
-## Setup & Installation
-
-1. Clone this repository to your local machine.
-
-    ```
-    git clone https://github.com/yourusername/flask-poker.git
-    ```
-
-2. Navigate to the project directory.
-
-    ```
-    cd flask-poker
-    ```
-
-3. Create a new Python virtual environment.
-
-    ```
-    python3 -m venv venv
-    ```
-
-4. Activate the virtual environment.
-
-    ```
-    source venv/bin/activate  # On Windows, use `.\venv\Scripts\activate`
-    ```
-
-5. Install the required Python packages.
-
-    ```
-    pip install -r requirements.txt
-    ```
-
-## Running the Server
-
-To run the server, execute the following command in the terminal:
+## Running the server
 ```
-export FLASK_APP=app.py # On Windows, use set FLASK_APP=app.py
+pip install flask
+```
+
+To run the server using the Flask run command, you'll need to set the FLASK_APP environment variable to point to the server.py file and then run the flask run command.
+
+If you're using a Unix or Mac OS system, you can do this with the following commands:
+
+```
+export FLASK_APP=server.py
 flask run
 ```
-The server will start on http://localhost:5000. If the port is in use, you can start the server on a different port by specifying the `-p` option, like this:
+
+Windows:
 ```
-flask run -p 5001
+set FLASK_APP=server.py
+flask run
 ```
 
-## API Endpoints
+These commands will start the server running on localhost port 5000.
 
-- **POST /new_game**: Starts a new game.
-  curl -X POST http://localhost:8080/new_game
 
-- **GET /state**: Returns the current game state.
-  curl -X GET http://localhost:8080/state
 
-## Game State
+### Playing a game
+To play a game, send a POST request to the /get_optimal_action route of the server. The request should include a JSON body with the following fields:
 
-The game state is returned as a JSON object with the following structure:
+player_name: A string representing the name of the player.
+card1_value: A string representing the rank of the first card in the player's hand (2-10, J, Q, K, A).
+card2_value: A string representing the rank of the second card in the player's hand (2-10, J, Q, K, A).
+are_suited: A boolean indicating whether the two cards in the player's hand are of the same suit.
+position: A string representing the player's position in the betting order ("Early", "Middle", "Late").
+min_bet: A numerical value representing the minimum bet.
+The server will respond with a JSON object that includes the following fields:
 
-```json
-{
-    "pot": 0,
-    "rounds_played": 0,
-    "current_player": null,
-    "player_states": {
-        "Player 1": {
-            "chips": 0,
-            "hand": [],
-            "action": null
-        },
-        // ... more players
-    }
-}
-```
+game_state: An object representing the state of the game, including the player's chips, hand, action, and position.
+optimal_action: A string representing the optimal action for the player ("FOLD", "CALL", "RAISE").
+
+
+
+
 
 # React native ui(macOs guide)
 
