@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import StarterPage from './starter';
 import customInput from './study';
+import ResultPage from './result';
 import {NavigationContainer} from "@react-navigation/native"
  const Stack = createStackNavigator();
 
@@ -17,6 +18,11 @@ export default function App() {
       <Stack.Screen
         name="StudyPage"
         component={customInput}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ResultPage"
+        component={ResultPage}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -46,7 +46,8 @@ const customInput = () => {
   }
   const handlePress = () => {
     console.log('Submit');
-
+    navigation.navigate("ResultPage");
+    
     alert(
       data.find((item) => item.key === card1)?.value +
         "," +
