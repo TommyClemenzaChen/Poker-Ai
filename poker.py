@@ -208,7 +208,7 @@ def player_action(player_name, hand, position, min_bet):
     game_state['player_states'][player_name]['position'] = position
     game_state['player_states'][player_name]['action'] = optimal_action.name
 
-    return game_state, explanation
+    return game_state, optimal_action, explanation
 
 def get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet):
     # Check if the player is trying to enter two cards that are the same and suited
@@ -224,6 +224,6 @@ def get_action_from_input(player_name, card1_value, card2_value, are_suited, pos
         card2.suit = 'Spades'
 
     # Call the player_action function
-    game_state, explanation = player_action(player_name, [card1, card2], position, min_bet)
+    game_state, optimal_action, explanation = player_action(player_name, [card1, card2], position, min_bet)
 
-    return game_state, explanation
+    return game_state, optimal_action, explanation

@@ -21,9 +21,9 @@ def get_optimal_action_route():
     position = data['position'] # Position
     min_bet = data['min_bet'] # Minimum bet(dynamic value)
 
-    game_state, optimal_action = get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet) # Retrieve optimal action, provided input
+    game_state, optimal_action, explanation = get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet) # Retrieve optimal action, provided input
 
-    return jsonify({'optimal_action': optimal_action.name}) # Return optimal action as JSON
+    return jsonify({'optimal_action': optimal_action.name, 'explanation': explanation}) # Return optimal action as JSON
 
 
 if __name__ == '__main__': # Run Flask app
