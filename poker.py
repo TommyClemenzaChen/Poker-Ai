@@ -1,5 +1,5 @@
 '''
-Action enum, represents 3 distinct actions
+Action enum, represents 2 distinct actions
 '''
 class Action(Enum):
     FOLD = 0
