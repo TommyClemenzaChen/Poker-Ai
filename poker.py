@@ -1,3 +1,5 @@
+from enum import Enum
+import random
 '''
 Action enum, represents 2 distinct actions
 '''
