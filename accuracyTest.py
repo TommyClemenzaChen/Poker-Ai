@@ -87,6 +87,8 @@ for combos in poker_Hands:
     
     if((action == 'RAISE' and poker_Hands[combos] == 1) or (action == 'FOLD' and poker_Hands[combos] == 0)):
         correct += 1
+    else:
+        print(f"Wrong: {combos} {action}")
     total += 1
 
 print(f"Accuracy: {correct * 100/total}%")   
