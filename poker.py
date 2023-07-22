@@ -201,7 +201,6 @@ def get_action_from_input(player_name, card1_value, card2_value, are_suited, pos
 
     return game_state, optimal_action
 
-
 # players = [Player(f'Player {i}', 1000) for i in range(1, 7)]
 # game = PokerFlop(players)
 # game_state = game.play_round()
