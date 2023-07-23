@@ -31,6 +31,7 @@ class Player:
         self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
         self.medium_values = ['9', '10']  # consider these as medium value cards
         self.low_values = ['2', '3', '4', '5', '6', '7', '8']  # consider these as low value cards
+        self.very_low_values = ['2', '3', '4']  # consider these as very low value cards
 
     def set_hand(self, hand):
         self.hand = hand
@@ -50,6 +51,9 @@ class Player:
 
     def has_low_card(self):
         return any(card.value in self.low_values for card in self.hand)
+    
+    def has_very_low_card(self):
+        return any(card.value in self.very_low_values for card in self.hand)
 
     def has_pair(self):
         values = [card.value for card in self.hand]
@@ -70,12 +74,17 @@ class Player:
             if pair_value in self.high_values:
                 hand_strength = 8  # High pair
             elif pair_value in self.medium_values:
-                hand_strength = 6  # Medium pair
+                hand_strength = 7  # Medium pair
+            elif pair_value not in self.very_low_values:
+                hand_strength= 7  # Low pair
             else:
-                hand_strength= 4  # Low pair
+                hand_strength = 5 # Very low pair
         elif self.is_suited():
             if self.has_high_card():
                 hand_strength = 7  # Suited high card
+                if(self.has_very_low_card()):
+                    hand_strength = 6 # Suited very low card
+            
             elif self.has_medium_card():
                 hand_strength = 5  # Suited medium card
             else:
