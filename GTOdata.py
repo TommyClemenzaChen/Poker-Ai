@@ -227,8 +227,8 @@ for i in range(1,n+1):
 
 # print(poker_Hands['KJo'])
 accuracy.accuracy_of_model(poker_Hands, "UTG")
-accuracy.accuracy_of_model(mid_position_hands, "UTG+1")
-accuracy.accuracy_of_model(late_position_hands, "UTG+3")
+accuracy.accuracy_of_model(mid_position_hands, 'Cut-off')
+accuracy.accuracy_of_model(late_position_hands, 'Small Blind')
 
 
 
