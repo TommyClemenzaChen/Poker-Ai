@@ -27,10 +27,10 @@ class Player:
         self.chips = chips
         self.position = None
         self.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-
-        self.high_values = ['J', 'Q', 'K', 'A']  # consider these as high value cards
-        self.medium_values = ['9', '10']  # consider these as medium value cards
-        self.low_values = ['5', '6', '7', '8']  # consider these as low value cards
+        self.premier_values = ['A'] # consider these as premier cards
+        self.high_values = ['K', 'J', 'Q']  # consider these as high value cards
+        self.medium_values = ['8','9', '10']  # consider these as medium value cards
+        self.low_values = ['5', '6', '7']  # consider these as low value cards
         self.very_low_values = ['2', '3', '4']  # consider these as very low value cards
 
     def set_hand(self, hand):
@@ -42,7 +42,9 @@ class Player:
     def count_values(self):
         values = [card.value for card in self.hand]
         return {value: values.count(value) for value in values}
-
+    def has_premier_card(self):
+        return any(card.value in self.premier_values for card in self.hand)
+    
     def has_high_card(self):
         return any(card.value in self.high_values for card in self.hand)
 
@@ -68,7 +70,7 @@ class Player:
         return max(values) - min(values) == 1  # Potential straight if values are consecutive
     
     def has_double_high_card(self):
-        if(self.hand[0] in self.high_values and self.hand[1] in self.high_values):
+        if ((self.hand[0].value in self.high_values or self.hand[0].value in self.premier_values) and (self.hand[1].value in self.high_values or self.hand[1].value in self.premier_values)):
             return True
         return False
 
@@ -76,37 +78,58 @@ class Player:
         hand_strength = 0
         if self.has_pair():
             pair_value = self.hand[0].value  # Since it's a pair, we can just take the value of the first card
-            if pair_value in self.high_values:
-                hand_strength = 8  # High pair
+            if pair_value in self.premier_values:
+                hand_strength = 10
+            elif pair_value in self.high_values:
+                hand_strength = 9  # High pair
             elif pair_value in self.medium_values:
-                hand_strength = 7  # Medium pair
-            elif pair_value not in self.very_low_values:
-                hand_strength= 7  # Low pair
+                hand_strength = 8  # Medium pair
+            elif pair_value in self.low_values:
+                hand_strength = 7  # Low pair
             else:
                 hand_strength = 5 # Very low pair
+
+        elif self.has_double_high_card():
+            hand_strength = 7
+
         elif self.is_suited():
-            if self.has_high_card():
-                hand_strength = 7  # Suited high card
-                if(self.has_very_low_card()):
+            if self.has_premier_card():
+                hand_strength = 8
+                if(self.has_low_card()):
+                    hand_strength = 7 # Suited very low card
+                elif(self.has_very_low_card()):
                     hand_strength = 6 # Suited very low card
+            elif self.has_high_card():
+                hand_strength = 7  # Suited high card
+                if(self.has_low_card()):
+                    hand_strength = 5 # Suited very low card
+                elif(self.has_very_low_card()):
+                    hand_strength = 4 # Suited very low card
             
             elif self.has_medium_card():
                 hand_strength = 5  # Suited medium card
             else:
                 hand_strength = 3  # Suited low card
         elif self.has_potential_straight():
-            if self.has_high_card():
+            if self.has_premier_card():
+                hand_strength = 8
+            elif self.has_high_card():
                 hand_strength = 7  # Potential high straight
             elif self.has_medium_card():
                 hand_strength = 4  # Potential medium straight
             else:
                 hand_strength = 2  # Potential low straight
 
-        elif self.has_double_high_card():
-            hand_strength = 7
-
-        else:
-            if self.has_high_card():
+        else: # off-suited high card starting hands
+            if self.has_premier_card():
+                hand_strength = 7
+                if(self.has_medium_card()):
+                    hand_strength = 6 # Has very low card
+                elif(self.has_low_card()):
+                    hand_strength = 5 # Has very low card
+                elif(self.has_very_low_card()):
+                    hand_strength = 4 # Has very low card
+            elif self.has_high_card():
                 hand_strength = 5  # High card
             elif self.has_medium_card():
                 hand_strength = 3  # Medium card
@@ -125,14 +148,36 @@ class Player:
         pot_odds = min_bet / pot_size if pot_size != 0 else 1
 
         # Based on the strength of hand and position, decide the action
-        if self.position in ['Small Blind', 'Big Blind', 'UTG']:  # Early position
+        '''
+            logic flow
+            if self.position in [POSITION]:
+                if pod_odds > 0.8 # if pod odds is high
+                    if hand_strength >= HIGH_NUMBER:
+                        return Action.RAISE
+                    else:
+                        return Action.FOLD
+                elif pod_odds > 0.5 # if pod odds is high
+                    if hand_strength >= HIGH_NUMBER:
+                        return Action.RAISE
+                    else:
+                        return Action.FOLD
+                else: # if pod odds is low
+                    if hand_strength >= LOW_NUMBER:
+                        return Actinon.RAISE
+                    else:
+                        return Action.FOLD
+        '''
+        # logic flow
+        # check 1) position => 2) pod_odds => 3) hands_strength => 4) return action
+        
+        if self.position in ['UTG','Hijack']:  # Early position
             if hand_strength >= 7:  # Strong hand
                 return Action.RAISE, "In early position with a strong hand, it's a good strategy to raise."
             elif pot_odds > 0.5:  # If pot odds are high
                 return Action.FOLD, "Even though in early position, the pot odds are not favorable, so it's better to fold."
             else:
                 return Action.FOLD, "In early position with a weak hand, it's a good strategy to fold."
-        elif self.position in ['UTG+1', 'UTG+2']:  # Middle position
+        elif self.position in ['Cut-off', 'BTN']:  # Middle position
             if hand_strength >= 6:  # Medium or strong hand
                 return Action.RAISE, "In middle position with a medium or strong hand, it's a good strategy to raise."
             elif pot_odds > 0.5:  # If pot odds are high
@@ -173,15 +218,16 @@ class PokerFlop:
         self.deal_cards()
         self.set_positions()
 
-        min_bet = 10  # This is the big blind
+        # pod = SB + BB + bet_size
+        min_bet = 2*big_blind_bet  # This is the big blind
         small_blind_bet = 5  # This is the small blind
-
+        big_blind_bet = 2*small_blind_bet
         players_in_round = self.players.copy()  # list of players still in the round
 
         # The player in the small blind position must post the small blind
         players_in_round[0].chips -= small_blind_bet
         self.state['player_states'][players_in_round[0].name]['chips'] = players_in_round[0].chips
-        self.state['pot'] += small_blind_bet
+        self.state['pot'] += small_blind_bet 
 
         # The player in the big blind position must post the big blind
         players_in_round[1].chips -= min_bet
@@ -206,7 +252,7 @@ class PokerFlop:
     def set_positions(self):
         # Rotate the players' positions.
         self.players = self.players[1:] + self.players[:1]
-        positions = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'Dealer']
+        positions = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'BTN']
         for player, position in zip(self.players, positions):
             player.position = position  # Assign position as a string.
 
