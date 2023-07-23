@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity , Icon } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+
+
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
 });
@@ -32,7 +34,7 @@ const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
 };
 
-const customInput = () => {
+const CustomInput = () => {
 
   const navigation = useNavigation(); 
   const [card1, setCard1] = React.useState('');
@@ -81,7 +83,15 @@ const customInput = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Study Mode</Text>
+
+      <View style = {styles.heading}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
+            <Text style={styles.backButtonText}>{"<"}</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.title}>Study Mode</Text>
+      </View>
+      
 
       <View style={styles.inputContainer}>
         <View style={styles.cardInput}>
@@ -138,9 +148,7 @@ const customInput = () => {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
+        
 
         <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
           <Text style={styles.submitButtonText}>Submit</Text>
@@ -154,7 +162,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#171717',
-    justifyContent: 'center',
+    
   },
   inputContainer: {
     backgroundColor: 'gray',
@@ -215,21 +223,24 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   backButton: {
-    backgroundColor: 'red',
-    borderRadius: 20,
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    alignSelf: 'center',
-    marginTop: 10,
+    backgroundColor: '#171717',
+    borderRadius: 10,
+    width: 40,
+    height: 40,
+
+    alignSelf: 'left',
+    justifyContent: 'center',
+    
   },
   backButtonText: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'center',
     color: 'white',
+    
   },
   submitButton: {
-    backgroundColor: 'orange',
+    backgroundColor: 'green',
     borderRadius: 20,
     paddingVertical: 15,
     paddingHorizontal: 30,
@@ -241,6 +252,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginLeft: 65,
+    
+  }, 
+  heading: {
+    flexDirection: 'row',
+    marginTop: 40,
+    marginBottom: 50,
+    //justifyContent: 'space-between',
+  }
+  
+
 });
 
-export default customInput;
+export default CustomInput;
