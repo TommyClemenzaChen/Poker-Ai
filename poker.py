@@ -29,7 +29,7 @@ class Player:
         self.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
         self.premier_values = ['A'] # consider these as premier cards
         self.high_values = ['K', 'J', 'Q']  # consider these as high value cards
-        self.medium_values = ['8','9', '10']  # consider these as medium value cards
+        self.medium_values = ['8', '9', '10']  # consider these as medium value cards
         self.low_values = ['5', '6', '7']  # consider these as low value cards
         self.very_low_values = ['2', '3', '4']  # consider these as very low value cards
 
@@ -87,7 +87,7 @@ class Player:
             elif pair_value in self.low_values:
                 hand_strength = 7  # Low pair
             else:
-                hand_strength = 5 # Very low pair
+                hand_strength = 6 # Very low pair
 
         elif self.has_double_high_card():
             hand_strength = 7
@@ -102,14 +102,37 @@ class Player:
             elif self.has_high_card():
                 hand_strength = 7  # Suited high card
                 if(self.has_low_card()):
-                    hand_strength = 5 # Suited very low card
+                    hand_strength = 6 # Suited very low card
                 elif(self.has_very_low_card()):
-                    hand_strength = 4 # Suited very low card
+                    hand_strength = 5 # Suited very low card
             
             elif self.has_medium_card():
                 hand_strength = 5  # Suited medium card
+                if(self.has_low_card()):
+                    hand_strength = 4 # Suited very low card
+                elif(self.has_very_low_card()):
+                    hand_strength = 3 # Suited very low card
+                
+            elif self.has_potential_straight():
+                if self.has_premier_card():
+                    hand_strength = 8
+                elif self.has_high_card():
+                    hand_strength = 7  # Suited high card
+                elif self.has_medium_card():
+                    hand_strength = 6 # Suited very low card
+                elif self.has_low_card():
+                    hand_strength = 4  # Suited medium card
+                elif self.has_very_low_card():
+                    if self.has_low_card():
+                        hand_strength = 4  # Suited medium card
+                    else:
+                        hand_strength = 3  # Suited medium card
+                else:
+                    hand_strength = 3  # Suited low card
+            
             else:
                 hand_strength = 3  # Suited low card
+                
         elif self.has_potential_straight():
             if self.has_premier_card():
                 hand_strength = 8
@@ -126,11 +149,17 @@ class Player:
                 if(self.has_medium_card()):
                     hand_strength = 6 # Has very low card
                 elif(self.has_low_card()):
-                    hand_strength = 5 # Has very low card
+                    hand_strength = 3 # Has very low card
                 elif(self.has_very_low_card()):
-                    hand_strength = 4 # Has very low card
+                    hand_strength = 2 # Has very low card
             elif self.has_high_card():
                 hand_strength = 5  # High card
+                if(self.has_medium_card()):
+                    hand_strength = 4 # Has very low card
+                elif(self.has_low_card()):
+                    hand_strength = 3 # Has very low card
+                elif(self.has_very_low_card()):
+                    hand_strength = 2 # Has very low card
             elif self.has_medium_card():
                 hand_strength = 3  # Medium card
             else:
@@ -185,7 +214,7 @@ class Player:
             else:
                 return Action.FOLD, "In middle position with a weak hand, it's a good strategy to fold."
         else:  # Late position
-            if hand_strength > 4:  # Medium or strong hand
+            if hand_strength >= 4:  # Medium or strong hand
                 return Action.RAISE, "In late position with a medium or strong hand, it's a good strategy to raise."
             elif pot_odds > 0.5:  # If pot odds are high
                 return Action.FOLD, "Even though in late position, the pot odds are not favorable, so it's better to fold."
