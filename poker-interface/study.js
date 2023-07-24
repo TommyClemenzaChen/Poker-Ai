@@ -108,18 +108,7 @@ const CustomInput = () => {
       : require('./images/unchecked.png');
   
   // Handle dropdowns
-  const [isDropdown1Visible, setDropdown1] = useState(false);
-  const [isDropdown2Visible, setDropdown2] = useState(false);
-
-  const handleDropdown1 = (data) => {
-    console.log(data)
-    setCard1(data);
-    setDropdown1(!isDropdown1Visible);
-  }
-
-  const handleDropdown2 = () => {
-    setDropdown2(!isDropdown2Visible);
-  }
+  const [dropdown1Selected, setDropdown1] = useState("");
 
   // // Handle position buttons
   // const [buttonColor1, setButtonColor1] = useState(styles.player);
@@ -195,18 +184,32 @@ const CustomInput = () => {
         <View style={[styles.selectYourCardsParent, styles.parentFlexBox]}>
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
-                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={handleDropdown1}>
-                    <Text style={[styles.card1, styles.card1Typo]}>Card 1</Text>
-                    <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
-                </TouchableOpacity>
-                {/* <SelectList
-                  list={data}
-                  onSelectItem={handleDropdown1}
-                /> */}
-                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
+            <SelectList 
+                    setSelected={(val) => setDropdown1(val)} 
+                    data={data} 
+                    placeholder="Card 1"
+                    search={false}
+                    maxHeight={200}
+                    boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
+                    inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
+                    dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
+                    dropdownStyles={{backgroundColor: "#f0f0f0"}}
+                />
+                <SelectList 
+                    setSelected={(val) => setDropdown1(val)} 
+                    data={data} 
+                    placeholder="Card 2"
+                    search={false}
+                    maxHeight={200}
+                    boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
+                    inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
+                    dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
+                    dropdownStyles={{backgroundColor: "#f0f0f0"}}
+                />
+                {/* <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
                     <Text style={[styles.card1, styles.card1Typo]}>Card 2</Text>
                     <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
             <TouchableOpacity style={[styles.suitedButton, styles.cardDropdownFlexBox, {backgroundColor : suitedColor}]} onPress={handleSuited}>
                 <Text style={[styles.card1, styles.card1Typo]}>Suited</Text>
