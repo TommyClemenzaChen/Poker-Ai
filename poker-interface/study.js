@@ -200,7 +200,7 @@ const CustomInput = () => {
                     data={data} 
                     placeholder="Card 1"
                     search={false}
-                    maxHeight={dropdownHeight} // dynamic maxHeight
+                    maxHeight={250} 
                     boxStyles={{backgroundColor : "#f0f0f0", minWidth, maxWidth, paddingVertical: 16}}
                     inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
@@ -211,11 +211,11 @@ const CustomInput = () => {
                     data={data} 
                     placeholder="Card 2"
                     search={false}
-                    maxHeight={250}
-                    boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
+                    maxHeight={250} 
+                    boxStyles={{backgroundColor : "#f0f0f0", minWidth, maxWidth, paddingVertical: 16}}
                     inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
-                    dropdownStyles={{backgroundColor: "#f0f0f0"}}
+                    dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
                 {/* <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
                     <Text style={[styles.card1, styles.card1Typo]}>Card 2</Text>
