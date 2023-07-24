@@ -19,7 +19,7 @@ const handleSubmit = async (card1, card2, checked, position) => {
     position: position,
     min_bet: 10,
   });
-  const opt = res.data["optimal_action"]; 
+  
 
   console.log(res.data);
   showOptimalAction(res.data);
@@ -29,6 +29,7 @@ const handleSubmit = async (card1, card2, checked, position) => {
   } else {
     console.log("Failure");
   }
+  
 };
 
 const showOptimalAction = (action) => {
@@ -47,9 +48,11 @@ const CustomInput = () => {
   const handleBackButton = () => {
     navigation.navigate("StarterPage"); 
   }
-  const handlePress = () => {
+  const handlePress = async() => {
     console.log('Submit');
-    navigation.navigate("ResultPage"), {opt};
+    const rest = await api.post('/get_optimal_action');
+    const opt = rest.data["optimal_action"]; 
+    navigation.navigate("ResultPage", {opt});
     
     alert(
       data.find((item) => item.key === selectedCard1)?.value +
