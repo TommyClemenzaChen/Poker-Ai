@@ -165,6 +165,10 @@ const CustomInput = () => {
   const dropdownItemHeight = 40; // Set this to the height of your dropdown items
   const maxDropdownHeight = 400; // Maximum dropdown height
 
+  // Set dropdown minWidth and maxWidth
+  const minWidth = 200;
+  const maxWidth = 400;
+
   // Calculate dropdown height based on data length
   const dropdownHeight = Math.min(data.length * dropdownItemHeight, maxDropdownHeight);
 
@@ -197,17 +201,17 @@ const CustomInput = () => {
                     placeholder="Card 1"
                     search={false}
                     maxHeight={dropdownHeight} // dynamic maxHeight
-                    boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
+                    boxStyles={{backgroundColor : "#f0f0f0", minWidth, maxWidth, paddingVertical: 16}}
                     inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
-                    dropdownStyles={{backgroundColor: "#f0f0f0"}}
+                    dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
                 <SelectList 
                     setSelected={(val) => setDropdown1(val)} 
                     data={data} 
                     placeholder="Card 2"
                     search={false}
-                    maxHeight={200}
+                    maxHeight={250}
                     boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
                     inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
