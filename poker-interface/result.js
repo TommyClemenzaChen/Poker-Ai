@@ -1,8 +1,8 @@
 import * as React from "react";
-import {Image, StyleSheet, Pressable, Text, View} from "react-native";
+import {Image, StyleSheet, Pressable, Text, View, TouchableOpacity} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import { FontFamily, Padding, Color, FontSize } from "./GlobalStyles";
-import { TouchableOpacity } from "react-native-web";
+// import { TouchableOpacity } from "react-native-web";
 
 const Result = () => {
 	const navigation = useNavigation();
