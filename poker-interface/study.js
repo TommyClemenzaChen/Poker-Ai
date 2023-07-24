@@ -166,8 +166,8 @@ const CustomInput = () => {
   const maxDropdownHeight = 400; // Maximum dropdown height
 
   // Set dropdown minWidth and maxWidth
-  const minWidth = 200;
-  const maxWidth = 400;
+  const minWidth = 120;
+  const maxWidth = 200;
 
   // Calculate dropdown height based on data length
   const dropdownHeight = Math.min(data.length * dropdownItemHeight, maxDropdownHeight);
