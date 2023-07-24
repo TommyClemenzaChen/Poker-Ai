@@ -2,17 +2,21 @@ import * as React from "react";
 import {Image, StyleSheet, Pressable, Text, View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import { FontFamily, Padding, Color, FontSize } from "./GlobalStyles";
+import { TouchableOpacity } from "react-native-web";
 
 const Result = () => {
-  	const navigation = useNavigation();
-  	
+	const navigation = useNavigation();
+
+	const handleBackButton = () => {
+		navigation.navigate("StudyPage"); 
+	}
   	return (
     		<Pressable style={[styles.result, styles.iconLayout]} onPress={()=>{}}>
       			<View style={styles.header}>
 						{/* back button */}
-        				<Pressable style={[styles.back1, styles.backLayout]} onPress={()=>{}}>
+        				<TouchableOpacity style={[styles.back1, styles.backLayout]} onPress={handleBackButton}>
           					<Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
-        				</Pressable>
+        				</TouchableOpacity>
         				<View style={[styles.textHereWrapper, styles.wrapperFlexBox]}>
           					<Text style={[styles.textHere2, styles.foldTypo]}>Result</Text>
         				</View>
