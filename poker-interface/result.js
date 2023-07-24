@@ -9,8 +9,9 @@ const Result = () => {
   	return (
     		<Pressable style={[styles.result, styles.iconLayout]} onPress={()=>{}}>
       			<View style={styles.header}>
+						{/* back button */}
         				<Pressable style={[styles.back1, styles.backLayout]} onPress={()=>{}}>
-          					<Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source="back.png" />
+          					<Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
         				</Pressable>
         				<View style={[styles.textHereWrapper, styles.wrapperFlexBox]}>
           					<Text style={[styles.textHere2, styles.foldTypo]}>Result</Text>
@@ -23,7 +24,16 @@ const Result = () => {
             						<Text style={[styles.fold, styles.foldTypo]}>Fold</Text>
           					</View>
         				</View>
-        				<View style={[styles.emoji, styles.emojiSpaceBlock]}>
+						{/*this is for result icons*/}
+						<View>
+							<Image 
+							source={require("./images/fold_image.png")}
+							style={{ width: 180, height: 180 }}
+							// alt="Fold Image"
+							/>
+							
+						</View>
+        				{/* <View style={[styles.emoji, styles.emojiSpaceBlock]}>
           					<Image style={[styles.emojiChild, styles.emojiLayout]} resizeMode="cover" source="Polygon 1.png" />
           					<Image style={[styles.emojiItem, styles.emojiItemPosition]} resizeMode="cover" source="Polygon 2.png" />
           					<View style={[styles.vectorParent, styles.emojiItemPosition]}>
@@ -31,7 +41,7 @@ const Result = () => {
             						<Image style={[styles.vectorIcon1, styles.vectorIconLayout]} resizeMode="cover" source="Vector.png" />
             						<Image style={styles.frameChild} resizeMode="cover" source="Line 4.png" />
           					</View>
-        				</View>
+        				</View> */}
         				<Pressable style={[styles.button, styles.emojiSpaceBlock]} onPress={()=>{}}>
           					<Text style={styles.textHere3}>View Details</Text>
         				</Pressable>
