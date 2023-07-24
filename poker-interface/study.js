@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity , Icon } from 'react-native';
+// import React from 'react';
+import React, {useState} from 'react';
+import { Image, Pressable, View, Text, StyleSheet, TouchableOpacity , Icon} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
@@ -27,8 +27,6 @@ const handleSubmit = async (card1, card2, checked, position) => {
     console.log("Failure");
   }
 };
-
-
 
 const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
@@ -63,8 +61,6 @@ const CustomInput = () => {
     handleSubmit(card1, card2, checked, position);
   };
 
-
-
   const data = [
     { key: '1', value: 'A' },
     { key: '2', value: '2' },
@@ -81,19 +77,133 @@ const CustomInput = () => {
     { key: '13', value: 'King' },
   ];
 
-  return (
-    <View style={styles.container}>
+  // Handle suited checkbox
+  const [suited, setSuited] = useState(false);
 
-      <View style = {styles.heading}>
+  const handleSuited = () => {
+    setSuited(!suited);
+  }
+
+  const suitedColor = suited ? '#8DD2C5' : '#F0F0F0';
+  
+  const imageSource = suited 
+      ? require('./images/checked.png') 
+      : require('./images/unchecked.png');
+
+  // // Handle position buttons
+  // const [buttonColor1, setButtonColor1] = useState(styles.player);
+  // const [buttonColor2, setButtonColor2] = useState(styles.player);
+  // const [buttonColor3, setButtonColor3] = useState(styles.player);
+  // const [buttonColor4, setButtonColor4] = useState(styles.player);
+  // const [buttonColor5, setButtonColor5] = useState(styles.player);
+  // const [buttonColor6, setButtonColor6] = useState(styles.player);
+  
+  // // Button onPress methods
+  // const handlePress1 = () => {
+  //     setButtonColor1(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+
+  // const handlePress2 = () => {
+  //     setButtonColor2(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+
+  // const handlePress3 = () => {
+  //     setButtonColor3(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+
+  // const handlePress4 = () => {
+  //     setButtonColor4(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+
+  // const handlePress5 = () => {
+  //     setButtonColor5(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+  // const handlePress6 = () => {
+  //     setButtonColor6(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
+  // };
+
+  // Handle position buttons
+  const [lastPressedButton, setLastPressedButton] = useState(null);
+
+  // Button onPress method
+  const handlePress_position = (buttonNumber) => {
+    setLastPressedButton(buttonNumber);
+  };
+  
+  return (
+    <View style={[styles.studyMode, styles.headerBg]}>
+
+      {/* <View style = {styles.heading}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
             <Text style={styles.backButtonText}>{"<"}</Text>
           </TouchableOpacity>
-
           <Text style={styles.title}>Study Mode</Text>
+      </View> */}
+      <View style={[styles.header, styles.headerFlexBox]}>
+          <TouchableOpacity style={[styles.back1, styles.backLayout]} onPress={handleBackButton}>
+          		  <Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
+        	</TouchableOpacity>
+          <View style={[styles.textHereWrapper, styles.parentFlexBox]}>
+              <Text style={[styles.textHere1, styles.card1Typo]}>Study Mode</Text>
+          </View>
+          <View style={styles.backIcon1} />
       </View>
-      
 
-      <View style={styles.inputContainer}>
+    <View style={[styles.frameParent, styles.parentFlexBox]}>
+        <View style={[styles.selectYourCardsParent, styles.parentFlexBox]}>
+            <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
+            <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
+                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
+                    <Text style={[styles.card1, styles.card1Typo]}>Card 1</Text>
+                    <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
+                    <Text style={[styles.card1, styles.card1Typo]}>Card 2</Text>
+                    <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity style={[styles.suitedButton, styles.cardDropdownFlexBox, {backgroundColor : suitedColor}]} onPress={handleSuited}>
+                <Text style={[styles.card1, styles.card1Typo]}>Suited</Text>
+                <Image style={styles.suitedButtonChild} resizeMode="cover" source={imageSource}/>
+            </TouchableOpacity>
+        </View>
+        <View style={[styles.whatsYourPositionParent, styles.parentFlexBox]}>
+            <Text style={[styles.selectYourCards1, styles.card1Typo]}>What’s Your Position?</Text>
+                <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
+                    <TouchableOpacity style={[lastPressedButton === 1 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(1)}>
+                        <Text style={[styles.card1, styles.card1Typo]}>D</Text>
+                    </TouchableOpacity>
+                    <View style={styles.frameGroup}>
+                        <View style={[styles.playerGroup, styles.headerFlexBox]}>
+                            <TouchableOpacity style={[lastPressedButton === 2 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(2)}>
+                                <Text style={[styles.card1, styles.card1Typo]}>SB</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[lastPressedButton === 3 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(3)}>
+                                <Text style={[styles.card1, styles.card1Typo]}>BB</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.viewButton, styles.viewSpaceBlock]}>
+                            <Text style={styles.viewPreflopAdvice}>VIEW PREFLOP ADVICE
+                            </Text>
+                        </View>
+                        <View style={[styles.frameView, styles.viewSpaceBlock]}>
+                        <TouchableOpacity style={[lastPressedButton === 4 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(4)}>
+                            <Text style={[styles.card1, styles.card1Typo]}>3</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[lastPressedButton === 5 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(5)}>
+                            <Text style={[styles.card1, styles.card1Typo]}>2</Text>
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={[lastPressedButton === 6 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(6)}>
+                        <Text style={[styles.card1, styles.card1Typo]}>1</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </View>
+
+      /* <View style={styles.inputContainer}>
         <View style={styles.cardInput}>
           <Text style={styles.cardInputTitle}>Select your cards</Text>
 
@@ -154,7 +264,9 @@ const CustomInput = () => {
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </View> 
+    */
+    
   );
 };
 
@@ -229,8 +341,7 @@ const styles = StyleSheet.create({
     height: 40,
 
     alignSelf: 'left',
-    justifyContent: 'center',
-    
+    justifyContent: 'center', 
   },
   backButtonText: {
     fontSize: 25,
@@ -265,9 +376,184 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 50,
     //justifyContent: 'space-between',
-  }
+  },
   
-
+  headerBg: {
+    backgroundColor: "#252525",
+    overflow: "hidden"
+    },
+    headerFlexBox: {
+    justifyContent: "space-between",
+    flexDirection: "row"
+    },
+    parentFlexBox: {
+    justifyContent: "center",
+    alignItems: "center"
+    },
+    card1Typo: {
+    textAlign: "left",
+    fontFamily: "Plus Jakarta Sans_bold",
+    fontWeight: "700"
+    },
+    suitedButtonSpaceBlock: {
+    marginTop: 30,
+    alignSelf: "stretch"
+    },
+    cardDropdownFlexBox: {
+    paddingHorizontal: 24,
+    borderRadius: 14,
+    height: 60,
+    backgroundColor: "#f0f0f0",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    overflow: "hidden"
+    },
+    playerSpaceBlock: {
+    padding: 10,
+    justifyContent: "center",
+    overflow: "hidden"
+    },
+    viewSpaceBlock: {
+    marginTop: 20,
+    alignItems: "center"
+    },
+    backIcon1: {
+    width: 48,
+    height: 48,
+    overflow: "hidden"
+    },
+    textHere1: {
+    color: "#f0f0f0",
+    fontSize: 18,
+    textAlign: "left"
+    },
+    textHereWrapper: {
+    height: 48,
+    flexDirection: "row",
+    justifyContent: "center"
+    },
+    header: {
+    borderStyle: "solid",
+    borderColor: "#606060",
+    borderBottomWidth: 0.5,
+    width: 390,
+    height: 90,
+    alignItems: "flex-end",
+    overflow: "hidden",
+    backgroundColor: "#252525"
+    },
+    selectYourCards1: {
+    fontSize: 24,
+    color: "#eabf6f"
+    },
+    card1: {
+    color: "#017a63",
+    fontSize: 18,
+    textAlign: "left"
+    },
+    icroundArrowBackIosIcon2: {
+    width: 16,
+    height: 16,
+    overflow: "hidden"
+    },
+    cardDropdown: {
+    width: 160,
+    paddingVertical: 8
+    },
+    cardDropdownParent: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center"
+    },
+    suitedButtonChild: {
+    width: 24,
+    height: 24
+    },
+    suitedButton: {
+    paddingVertical: 10,
+    marginTop: 30,
+    alignSelf: "stretch",
+    backgroundColor: '#F0F0F0'
+    },
+    selectYourCardsParent: {
+    alignSelf: "stretch"
+    },
+    player: {
+    borderRadius: 100,
+    width: 60,
+    height: 60,
+    backgroundColor: "#f0f0f0",
+    padding: 10,
+    alignItems: "center"
+    },
+    coloredPlayer: {
+      borderRadius: 100,
+      width: 60,
+      height: 60,
+      backgroundColor: "#8DD2C5",
+      padding: 10,
+      alignItems: "center"
+    },
+    playerGroup: {
+    alignSelf: "stretch",
+    alignItems: "center"
+    },
+    viewPreflopAdvice: {
+    color: "#898989",
+    textAlign: "center",
+    fontFamily: "Plus Jakarta Sans_bold",
+    fontWeight: "700",
+    fontSize: 18
+    },
+    viewButton: {
+    borderRadius: 60,
+    backgroundColor: "#606060",
+    width: 180,
+    height: 140,
+    padding: 10,
+    justifyContent: "center",
+    overflow: "hidden"
+    },
+    frameView: {
+    alignSelf: "stretch",
+    justifyContent: "space-between",
+    flexDirection: "row"
+    },
+    frameGroup: {
+    alignItems: "center"
+    },
+    whatsYourPositionParent: {
+    marginTop: 60,
+    alignSelf: "stretch"
+    },
+    frameParent: {
+    paddingHorizontal: 25,
+    paddingVertical: 60,
+    alignSelf: "stretch",
+    flex: 1
+    },
+    studyMode: {
+    width: "100%",
+    height: 844,
+    alignItems: "center",
+    overflow: "hidden",
+    flex: 1
+    },
+    back1: {
+      height: 48
+    },
+    backLayout: {
+      width: 48,
+      height: 48
+    },
+    icon: {
+      height: "100%",
+      overflow: "hidden"
+    },
+    iconLayout: {
+      width: "100%",
+      overflow: "hidden"
+    }
 });
-
 export default CustomInput;
