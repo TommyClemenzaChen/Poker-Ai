@@ -5,6 +5,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import { Color, FontFamily, FontSize, Padding, Border } from "./GlobalStyles";
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:5000'
@@ -61,20 +62,36 @@ const CustomInput = () => {
     handleSubmit(card1, card2, checked, position);
   };
 
+  // const data = [
+  //   { key: '1', value: 'A' },
+  //   { key: '2', value: '2' },
+  //   { key: '3', value: '3' },
+  //   { key: '4', value: '4' },
+  //   { key: '5', value: '5' },
+  //   { key: '6', value: '6' },
+  //   { key: '7', value: '7' },
+  //   { key: '8', value: '8' },
+  //   { key: '9', value: '9' },
+  //   { key: '10', value: '10' },
+  //   { key: '11', value: 'Jack' },
+  //   { key: '12', value: 'Queen' },
+  //   { key: '13', value: 'King' },
+  // ];
+
   const data = [
     { key: '1', value: 'A' },
-    { key: '2', value: '2' },
-    { key: '3', value: '3' },
-    { key: '4', value: '4' },
-    { key: '5', value: '5' },
-    { key: '6', value: '6' },
-    { key: '7', value: '7' },
-    { key: '8', value: '8' },
-    { key: '9', value: '9' },
-    { key: '10', value: '10' },
-    { key: '11', value: 'Jack' },
-    { key: '12', value: 'Queen' },
-    { key: '13', value: 'King' },
+    { key: '2', value: 'K' },
+    { key: '3', value: 'Q' },
+    { key: '4', value: 'J' },
+    { key: '5', value: 'T' },
+    { key: '6', value: '9' },
+    { key: '7', value: '8' },
+    { key: '8', value: '7' },
+    { key: '9', value: '6' },
+    { key: '10', value: '5' },
+    { key: '11', value: '4' },
+    { key: '12', value: '3' },
+    { key: '13', value: '2' },
   ];
 
   // Handle suited checkbox
@@ -89,6 +106,20 @@ const CustomInput = () => {
   const imageSource = suited 
       ? require('./images/checked.png') 
       : require('./images/unchecked.png');
+  
+  // Handle dropdowns
+  const [isDropdown1Visible, setDropdown1] = useState(false);
+  const [isDropdown2Visible, setDropdown2] = useState(false);
+
+  const handleDropdown1 = (data) => {
+    console.log(data)
+    setCard1(data);
+    setDropdown1(!isDropdown1Visible);
+  }
+
+  const handleDropdown2 = () => {
+    setDropdown2(!isDropdown2Visible);
+  }
 
   // // Handle position buttons
   // const [buttonColor1, setButtonColor1] = useState(styles.player);
@@ -128,8 +159,19 @@ const CustomInput = () => {
   // Button onPress method
   const handlePress_position = (buttonNumber) => {
     setLastPressedButton(buttonNumber);
+
+    // If the button number corresponds to D, SB, BB, 1, 2, or 3 then enable the "VIEW PREFLOP ADVICE" button
+    if ([1, 2, 3, 4, 5, 6].includes(buttonNumber)) {
+      setViewButtonEnabled(true);
+    }else {
+      setViewButtonEnabled(false);
+    }
   };
   
+  // View button
+  const [isViewButtonEnabled, setViewButtonEnabled] = useState(false);
+  const string_color = isViewButtonEnabled ? "#f0f0f0" : "#898989";
+
   return (
     <View style={[styles.studyMode, styles.headerBg]}>
 
@@ -153,10 +195,14 @@ const CustomInput = () => {
         <View style={[styles.selectYourCardsParent, styles.parentFlexBox]}>
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
-                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
+                <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={handleDropdown1}>
                     <Text style={[styles.card1, styles.card1Typo]}>Card 1</Text>
                     <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
                 </TouchableOpacity>
+                {/* <SelectList
+                  list={data}
+                  onSelectItem={handleDropdown1}
+                /> */}
                 <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
                     <Text style={[styles.card1, styles.card1Typo]}>Card 2</Text>
                     <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
@@ -182,10 +228,15 @@ const CustomInput = () => {
                                 <Text style={[styles.card1, styles.card1Typo]}>BB</Text>
                             </TouchableOpacity>
                         </View>
-                        <View style={[styles.viewButton, styles.viewSpaceBlock]}>
-                            <Text style={styles.viewPreflopAdvice}>VIEW PREFLOP ADVICE
+                        <TouchableOpacity 
+                            style={[styles.viewButton, styles.viewSpaceBlock, !isViewButtonEnabled && styles.disabledButton]}
+                            disabled={!isViewButtonEnabled}
+                        >
+                            <Text 
+                              style={[styles.viewPreflopAdvice, {color: string_color}]}
+                            >VIEW PREFLOP ADVICE
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                         <View style={[styles.frameView, styles.viewSpaceBlock]}>
                         <TouchableOpacity style={[lastPressedButton === 4 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(4)}>
                             <Text style={[styles.card1, styles.card1Typo]}>3</Text>
@@ -500,15 +551,31 @@ const styles = StyleSheet.create({
     alignItems: "center"
     },
     viewPreflopAdvice: {
-    color: "#898989",
+    color: "#f0f0f0",
     textAlign: "center",
     fontFamily: "Plus Jakarta Sans_bold",
     fontWeight: "700",
     fontSize: 18
     },
+    disabledPreflopAdvice: {
+      color: "#898989",
+      textAlign: "center",
+      fontFamily: "Plus Jakarta Sans_bold",
+      fontWeight: "700",
+      fontSize: 18
+      },
+    disabledButton: {
+      borderRadius: 60,
+      backgroundColor: "#606060",
+      width: 180,
+      height: 140,
+      padding: 10,
+      justifyContent: "center",
+      overflow: "hidden"
+    },
     viewButton: {
     borderRadius: 60,
-    backgroundColor: "#606060",
+    backgroundColor: "#017A63",
     width: 180,
     height: 140,
     padding: 10,
@@ -554,6 +621,42 @@ const styles = StyleSheet.create({
     iconLayout: {
       width: "100%",
       overflow: "hidden"
-    }
+    },
+    card: {
+      paddingVertical: Padding.p_sm,
+      width: 160,
+    },
+    cardParent: {
+      marginLeft: -80,
+      top: 0,
+      left: "50%",
+      position: "absolute",
+      overflow: "hidden",
+    },
+    dropdown1: {
+      top: 120,
+      left: 0,
+      shadowColor: "rgba(0, 0, 0, 0.1)",
+      shadowOffset: {
+        width: 0,
+        height: 5,
+      },
+      shadowRadius: 10,
+    elevation: 10,
+    shadowOpacity: 1,
+    height: 330,
+    zIndex: 3,
+    position: "absolute",
+    width: 160,
+    backgroundColor: Color.whitesmoke,
+    borderRadius: Border.br_sm,
+  },
+  cardFlexBox: {
+    paddingHorizontal: Padding.p_5xl,
+    backgroundColor: Color.whitesmoke,
+    flexDirection: "row",
+    alignItems: "center",
+    overflow: "hidden",
+  }
 });
 export default CustomInput;

@@ -1,20 +1,28 @@
-
 /* fonts */
 export const FontFamily = {
-    plusJakartaSansExtrabold: "Plus Jakarta Sans_extrabold",
     plusJakartaSansBold: "Plus Jakarta Sans_bold",
-};
-/* font sizes */
-export const FontSize = {
+  };
+  /* font sizes */
+  export const FontSize = {
     size_lg: 18,
-};
-/* Colors */
-export const Color = {
-    gray: "#252525",
-    burlywood: "#eabf6f",
+    size_5xl: 24,
+  };
+  /* Colors */
+  export const Color = {
+    gray_100: "#252525",
     whitesmoke: "#f0f0f0",
-};
-/* Paddings */
-export const Padding = {
-    p_41xl: 60,
-};
+    teal: "#017a63",
+    burlywood: "#eabf6f",
+  };
+  /* Paddings */
+  export const Padding = {
+    p_3xs: 10,
+    p_5xl: 24,
+    p_sm: 14,
+    p_5xs: 8,
+  };
+  /* border radiuses */
+  export const Border = {
+    br_81xl: 100,
+    br_sm: 14,
+  };
