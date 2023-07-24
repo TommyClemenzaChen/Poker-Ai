@@ -50,16 +50,16 @@ const CustomInput = () => {
     navigation.navigate("ResultPage");
     
     alert(
-      data.find((item) => item.key === card1)?.value +
+      data.find((item) => item.key === selectedCard1)?.value +
         "," +
-        data.find((item) => item.key === card2)?.value +
+        data.find((item) => item.key === selectedCard2)?.value +
         "\n" +
         position +
         "\n" +
         (checked ? "suited" : "not suited")
     );
 
-    handleSubmit(card1, card2, checked, position);
+    handleSubmit(selectedCard1, selectedCard2, checked, position);
   };
 
   // const data = [
@@ -211,6 +211,7 @@ const CustomInput = () => {
                         </View>
                         <TouchableOpacity 
                             style={[styles.viewButton, styles.viewSpaceBlock, !isViewButtonEnabled && styles.disabledButton]}
+                            onPress={handlePress}
                             disabled={!isViewButtonEnabled}
                         >
                             <Text 
