@@ -19,6 +19,8 @@ const handleSubmit = async (card1, card2, checked, position) => {
     position: position,
     min_bet: 10,
   });
+  const opt = res.data["optimal_action"]; 
+
   console.log(res.data);
   showOptimalAction(res.data);
 
@@ -47,7 +49,7 @@ const CustomInput = () => {
   }
   const handlePress = () => {
     console.log('Submit');
-    navigation.navigate("ResultPage");
+    navigation.navigate("ResultPage"), {opt};
     
     alert(
       data.find((item) => item.key === selectedCard1)?.value +

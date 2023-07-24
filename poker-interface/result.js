@@ -2,10 +2,13 @@ import * as React from "react";
 import {Image, StyleSheet, Pressable, Text, View, TouchableOpacity} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import { FontFamily, Padding, Color, FontSize } from "./GlobalStyles";
+import { useRoute} from "@react-navigation/native"
 // import { TouchableOpacity } from "react-native-web";
 
 const Result = () => {
 	const navigation = useNavigation();
+	const route = useRoute(); 
+	const {optimalAction} = route.params; 
 
 	const handleBackButton = () => {
 		navigation.navigate("StudyPage"); 
@@ -22,6 +25,12 @@ const Result = () => {
         				</View>
         				<View style={[styles.back2, styles.backLayout]} />
       			</View>
+				<View>
+					<Text>Result</Text>
+					<Text>
+						{optimalAction}
+					</Text>
+				</View>
       			<View style={[styles.frameParent, styles.buttonFlexBox]}>
         				<View style={[styles.frameWrapper, styles.wrapperFlexBox]}>
           					<View style={styles.foldWrapper}>
