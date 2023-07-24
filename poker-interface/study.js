@@ -161,6 +161,13 @@ const CustomInput = () => {
   const [isViewButtonEnabled, setViewButtonEnabled] = useState(false);
   const string_color = isViewButtonEnabled ? "#f0f0f0" : "#898989";
 
+  // dropdown
+  const dropdownItemHeight = 40; // Set this to the height of your dropdown items
+  const maxDropdownHeight = 400; // Maximum dropdown height
+
+  // Calculate dropdown height based on data length
+  const dropdownHeight = Math.min(data.length * dropdownItemHeight, maxDropdownHeight);
+
   return (
     <View style={[styles.studyMode, styles.headerBg]}>
 
@@ -189,7 +196,7 @@ const CustomInput = () => {
                     data={data} 
                     placeholder="Card 1"
                     search={false}
-                    maxHeight={200}
+                    maxHeight={dropdownHeight} // dynamic maxHeight
                     boxStyles={{backgroundColor : "#f0f0f0", width: 200, paddingVertical: 16}}
                     inputStyles={{color:"#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
