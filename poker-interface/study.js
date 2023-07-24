@@ -15,7 +15,7 @@ const handleSubmit = async (card1, card2, checked, position) => {
     card1_value: card1,
     card2_value: card2,
     are_suited: checked,
-    player_name: 'bob',
+    player_name: 'Bob',
     position: position,
     min_bet: 10,
   });
@@ -110,38 +110,6 @@ const CustomInput = () => {
   // Handle dropdowns
   const [dropdown1Selected, setDropdown1] = useState("");
 
-  // // Handle position buttons
-  // const [buttonColor1, setButtonColor1] = useState(styles.player);
-  // const [buttonColor2, setButtonColor2] = useState(styles.player);
-  // const [buttonColor3, setButtonColor3] = useState(styles.player);
-  // const [buttonColor4, setButtonColor4] = useState(styles.player);
-  // const [buttonColor5, setButtonColor5] = useState(styles.player);
-  // const [buttonColor6, setButtonColor6] = useState(styles.player);
-  
-  // // Button onPress methods
-  // const handlePress1 = () => {
-  //     setButtonColor1(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-
-  // const handlePress2 = () => {
-  //     setButtonColor2(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-
-  // const handlePress3 = () => {
-  //     setButtonColor3(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-
-  // const handlePress4 = () => {
-  //     setButtonColor4(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-
-  // const handlePress5 = () => {
-  //     setButtonColor5(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-  // const handlePress6 = () => {
-  //     setButtonColor6(currentColor => currentColor === styles.player ? styles.coloredPlayer : styles.player);
-  // };
-
   // Handle position buttons
   const [lastPressedButton, setLastPressedButton] = useState(null);
 
@@ -172,15 +140,18 @@ const CustomInput = () => {
   // Calculate dropdown height based on data length
   const dropdownHeight = Math.min(data.length * dropdownItemHeight, maxDropdownHeight);
 
+  // functionality for diabling the "suited" button
+  const [selectedCard1, setSelectedCard1] = useState("");
+  const [selectedCard2, setSelectedCard2] = useState("");
+  const areCardsSame = selectedCard1 === selectedCard2;
+  // const suitedColor = suited && !areCardsSame ? '#8DD2C5' : '#F0F0F0';
+  const disabledButtonStyle = areCardsSame ? {backgroundColor: '#898989'} : {backgroundColor: suitedColor};
+
+
+
+
   return (
     <View style={[styles.studyMode, styles.headerBg]}>
-
-      {/* <View style = {styles.heading}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
-            <Text style={styles.backButtonText}>{"<"}</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>Study Mode</Text>
-      </View> */}
       <View style={[styles.header, styles.headerFlexBox]}>
           <TouchableOpacity style={[styles.back1, styles.backLayout]} onPress={handleBackButton}>
           		  <Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
@@ -196,7 +167,7 @@ const CustomInput = () => {
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
             <SelectList 
-                    setSelected={(val) => setDropdown1(val)} 
+                    setSelected={(val) => setSelectedCard1(val)} 
                     data={data} 
                     placeholder="Card 1"
                     search={false}
@@ -207,7 +178,7 @@ const CustomInput = () => {
                     dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
                 <SelectList 
-                    setSelected={(val) => setDropdown1(val)} 
+                    setSelected={(val) => setSelectedCard2(val)} 
                     data={data} 
                     placeholder="Card 2"
                     search={false}
@@ -217,12 +188,8 @@ const CustomInput = () => {
                     dropdownTextStyles={{color: "#017A63", fontSize: 18, fontWeight: 700}}
                     dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
-                {/* <TouchableOpacity style={[styles.cardDropdown, styles.cardDropdownFlexBox]} onPress={()=>{}}>
-                    <Text style={[styles.card1, styles.card1Typo]}>Card 2</Text>
-                    <Image style={styles.icroundArrowBackIosIcon2} resizeMode="cover" source={require('./images/dropdown_arrow.png')} />
-                </TouchableOpacity> */}
             </View>
-            <TouchableOpacity style={[styles.suitedButton, styles.cardDropdownFlexBox, {backgroundColor : suitedColor}]} onPress={handleSuited}>
+            <TouchableOpacity style={[styles.suitedButton, styles.cardDropdownFlexBox, disabledButtonStyle]} onPress={handleSuited} disabled={areCardsSame}>
                 <Text style={[styles.card1, styles.card1Typo]}>Suited</Text>
                 <Image style={styles.suitedButtonChild} resizeMode="cover" source={imageSource}/>
             </TouchableOpacity>
@@ -268,6 +235,12 @@ const CustomInput = () => {
         </View>
     </View>
 
+      /* <View style = {styles.heading}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
+            <Text style={styles.backButtonText}>{"<"}</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>Study Mode</Text>
+      </View> */
       /* <View style={styles.inputContainer}>
         <View style={styles.cardInput}>
           <Text style={styles.cardInputTitle}>Select your cards</Text>
