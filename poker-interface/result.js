@@ -37,15 +37,6 @@ const Result = () => {
 							/>
 							
 						</View>
-        				{/* <View style={[styles.emoji, styles.emojiSpaceBlock]}>
-          					<Image style={[styles.emojiChild, styles.emojiLayout]} resizeMode="cover" source="Polygon 1.png" />
-          					<Image style={[styles.emojiItem, styles.emojiItemPosition]} resizeMode="cover" source="Polygon 2.png" />
-          					<View style={[styles.vectorParent, styles.emojiItemPosition]}>
-            						<Image style={[styles.vectorIcon, styles.vectorIconLayout]} resizeMode="cover" source="Vector.png" />
-            						<Image style={[styles.vectorIcon1, styles.vectorIconLayout]} resizeMode="cover" source="Vector.png" />
-            						<Image style={styles.frameChild} resizeMode="cover" source="Line 4.png" />
-          					</View>
-        				</View> */}
         				<Pressable style={[styles.button, styles.emojiSpaceBlock]} onPress={()=>{}}>
           					<Text style={styles.textHere3}>View Details</Text>
         				</Pressable>
@@ -202,7 +193,8 @@ const styles = StyleSheet.create({
     		alignItems: "center",
     		overflow: "hidden",
     		flex: 1,
-    		backgroundColor: Color.gray
+    		// backgroundColor: Color.gray
+			backgroundColor: Color.gray_100
   	}
 });
 
