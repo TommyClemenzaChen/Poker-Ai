@@ -12,8 +12,12 @@ class Action(Enum):
 Card class, encapsulates Card functionality
 '''
 class Card:
+    valid_suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    valid_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
     def __init__(self, suit, value):
+        assert suit in self.valid_suits, f"Invalid suit: {suit}"
+        assert value in self.valid_values, f"Invalid value: {value}"
         self.suit = suit
         self.value = value
 
@@ -21,11 +25,15 @@ class Card:
         return f"{self.value} of {self.suit}"
 
 class Player:
+    valid_positions = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'BTN']
 
     def __init__(self, name, chips=1000):
         '''
         Initialize a player with a name and chips
         '''
+        assert isinstance(name, str), f"Invalid name: {name}"
+        assert name, "Name cannot be empty"
+
         self.name = name
         self.hand = []
         self.chips = chips
@@ -46,6 +54,7 @@ class Player:
         self.hand = hand
 
     def set_position(self, position):
+        assert position in self.valid_positions, f"Invalid position: {position}"
         '''
         Set position for player
         Parameters: 
@@ -63,12 +72,12 @@ class Player:
         values = [card.value for card in self.hand]
         return {value: values.count(value) for value in values}
     def has_premier_card(self):
-         """
-         This function checks if a player has a premier card in their hand.
+        """
+        This function checks if a player has a premier card in their hand.
 
 
-         Returns:
-         boolean: Whether a premier card is present in the player's hand.
+        Returns:
+        boolean: Whether a premier card is present in the player's hand.
         """
         return any(card.value in self.premier_values for card in self.hand)
     
@@ -83,7 +92,7 @@ class Player:
         return any(card.value in self.high_values for card in self.hand)
 
     def has_medium_card(self):
-         """
+        """
          This function checks if a player has a medium card in their hand.
 
          Returns:
@@ -92,7 +101,7 @@ class Player:
         return any(card.value in self.medium_values for card in self.hand)
 
     def has_low_card(self):
-         """
+        """
          This function checks if a player has a low card in their hand.
 
 
@@ -102,7 +111,7 @@ class Player:
         return any(card.value in self.low_values for card in self.hand)
     
     def has_very_low_card(self):
-         """
+        """
          This function checks if a player has a very low card in their hand.
 
 
@@ -112,7 +121,7 @@ class Player:
         return any(card.value in self.very_low_values for card in self.hand)
 
     def has_pair(self):
-         """
+        """
          This function checks if a player has a pair in their hand.
 
 
@@ -123,7 +132,7 @@ class Player:
         return len(set(values)) == 1  # Pair has two same value cards
 
     def is_suited(self):
-         """
+        """
          This function checks if a player's hand is suited. A hand is suited if all cards have the same suit.
 
 
@@ -143,7 +152,7 @@ class Player:
         return False
 
     def calculate_hand_strength(self):
-         """
+        """
          This function computes the hand strength of a particular hand. The hand strength is a number between 1 and 10, with 10 being the highest. The hand strength is computed as follows:
             - If the player has a pair, the hand strength is 10. If the pair is a premier pair, the hand strength is 10. If the pair is a high pair, the hand strength is 9. If the pair is a medium pair, the hand strength is 8. If the pair is a low pair, the hand strength is 7. If the pair is a very low pair, the hand strength is 6.
             - If the player has two high cards that are suited, the hand strength is 7. If the player has two high cards that are off-suited, the hand strength is 5. If the player has two medium cards that are suited, the hand strength is 5. If the player has two medium cards that are off-suited, the hand strength is 3. If the player has a high card and a medium card that are suited, the hand strength is 5. If the player has a high card and a medium card that are off-suited, the hand strength is 3. If the player has a high card and a low card that are suited, the hand strength is 4. If the player has a high card and a low card that are off-suited, the hand strength is 2. If the player has two low cards that are suited, the hand strength is 3. If the player has two low cards that are off-suited, the hand strength is 1.
@@ -244,7 +253,7 @@ class Player:
         return hand_strength
 
     def take_action(self, min_bet, pot_size):
-         """
+        """
          This function returns the optimal action for a player based on their hand strength, position, and pot odds.
         Parameters:
         (int) min_bet: The minimum bet to stay in the game.
@@ -308,7 +317,7 @@ class PokerFlop:
             player.hand = [self.draw_card(), self.draw_card()]
 
     def draw_card(self):
-         """
+        """
          This function draws a random card from the deck.
 
          Returns:
@@ -317,7 +326,7 @@ class PokerFlop:
         return self.deck.pop(random.randint(0, len(self.deck) - 1))
 
     def play_round(self):
-         """
+        """
          This function plays a round of poker. A round consists of the following:
             - The player in the small blind position must post the small blind.
             - The player in the big blind position must post the big blind.
@@ -364,7 +373,7 @@ class PokerFlop:
         return self.state
 
     def set_positions(self):
-         """
+        """
          This function assigns positions to players. The positions are as follows:
             - Small Blind
             - Big Blind
@@ -380,7 +389,7 @@ class PokerFlop:
             player.position = position  # Assign position as a string.
 
     def get_optimal_action(self, player_name, min_bet):
-         """
+        """
          This function returns the optimal action for a player based on their identifier, and the minumum bet. It is effectively a wrapper around the take_action() function in the Player class. 
         Parameters:
         (str) player_name: The name of the player.
@@ -392,7 +401,7 @@ class PokerFlop:
         return player.take_action(min_bet, self.state['pot'])
 
 def player_action(player_name, hand, position, min_bet):
-     """
+    """
          This function returns the optimal action for a player based on their hand, identifier, and the minumum bet. It is effectively a wrapper around the get_optimal_action() function in the PokerFlop class. 
         Parameters:
         (str) player_name: The name of the player.
@@ -401,7 +410,7 @@ def player_action(player_name, hand, position, min_bet):
         (int) min_bet: The minimum bet to stay in the game.
         Returns:
          (dict, Action, str): A tuple of (dict, Action, explanation) where Action is an Action enum corresponding to the optimal action and explanation is a string explaining the action. The first value in the returned tuple is a dictionary encapsulating the game state. 
-        """
+    """
     player = Player(player_name)
     player.set_hand(hand)  # Set player's hand. Now `hand` is a list of `Card` objects
     player.set_position(position)  # Set player's position
@@ -419,7 +428,7 @@ def player_action(player_name, hand, position, min_bet):
     return game_state, optimal_action, explanation
 
 def get_action_from_input(player_name, card1_value, card2_value, are_suited, position, min_bet):
-     """
+    """
          This function returns the game state, optimal action, and explanation for a player based on their hand, cards, determination of whether the hand is suited, position, identifier, and the minumum bet. It is effectively a wrapper around the player_action() function in the PokerFlop class. 
         Parameters:
         (str) player_name: The name of the player.
@@ -439,6 +448,7 @@ def get_action_from_input(player_name, card1_value, card2_value, are_suited, pos
     # Create Card objects for the hand
     card1 = Card('Spades', card1_value)
     card2 = Card('Clubs', card2_value)
+
 
     if are_suited:
         # If the cards are suited, they should have the same suit
