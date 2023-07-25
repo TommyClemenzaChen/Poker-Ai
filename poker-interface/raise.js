@@ -39,7 +39,7 @@ const Raise = () => {
 						{/*this is for result icons*/}
 						<View>
 							<Image 
-							source={require("./images/fold_image.png")}
+							source={require("./images/raise_image.png")}
 							style={{ width: 180, height: 180 }}
 							// alt="Fold Image"
 							/>
