@@ -2,35 +2,11 @@
 import React, {useState} from 'react';
 import { Image, Pressable, View, Text, StyleSheet, TouchableOpacity , Icon} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Color, FontFamily, FontSize, Padding, Border } from "./GlobalStyles";
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:5000'
-});
-const handleSubmit = async (card1, card2, checked, position) => {
-  const res = await api.post('/get_optimal_action', {
-    card1_value: card1,
-    card2_value: card2,
-    are_suited: checked,
-    player_name: 'Bob',
-    position: position,
-    min_bet: 10,
-  });
-  
 
-  console.log(res.data);
-  showOptimalAction(res.data);
-
-  if (res.status === 200) {
-    console.log("Success");
-  } else {
-    console.log("Failure");
-  }
-  
-};
 
 const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
@@ -39,56 +15,58 @@ const showOptimalAction = (action) => {
 const CustomInput = () => {
 
   const navigation = useNavigation(); 
-  const [card1, setCard1] = React.useState('');
-  const [card2, setCard2] = React.useState('');
-  const [checked, checkTheBox] = React.useState(false);
-  const [position, setPosition] = React.useState('');
-  const positionData = ['SB', 'BB', '1', '2', '3', 'D'];
+  const positionData = ['BTN', 'Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off'];
   
+  const api = axios.create({
+    baseURL: 'http://127.0.0.1:5000'
+  });
+  const handleSubmit = async (card1, card2, checked, position) => {
+    const res = await api.post('/get_optimal_action', {
+      card1_value: card1,
+      card2_value: card2,
+      are_suited: checked,
+      player_name: 'Bob',
+      position: position,
+      min_bet: 10,
+    });
+    
+  
+    console.log(res.data);
+    showOptimalAction(res.data);
+  
+    if (res.status === 200) {
+      console.log("Success");
+    } else {
+      console.log("Failure");
+    }
+    
+    if(res.data["optimal_action"] === "FOLD"){
+      navigation.navigate("FoldPage");
+      
+    }else{
+      navigation.navigate("RaisePage");
+      
+    }
+  };
+
   const handleBackButton = () => {
     navigation.navigate("StarterPage"); 
   }
   const handlePress = async() => {
     console.log('Submit');
-    const rest = await api.post('/get_optimal_action');
-    const opt = rest.data["optimal_action"]; 
-    navigation.navigate("ResultPage", {opt});
-    
-    alert(
-      data.find((item) => item.key === selectedCard1)?.value +
-        "," +
-        data.find((item) => item.key === selectedCard2)?.value +
-        "\n" +
-        position +
-        "\n" +
-        (checked ? "suited" : "not suited")
-    );
+    console.log(data[selectedCard1-1].value);
+    console.log(data[selectedCard2-1].value);
+    console.log(suited);
+    console.log(positionData[lastPressedButton-1]);
 
-    handleSubmit(selectedCard1, selectedCard2, checked, position);
+    handleSubmit(data[selectedCard1-1].value, data[selectedCard2-1].value, suited, positionData[lastPressedButton-1]);
   };
-
-  // const data = [
-  //   { key: '1', value: 'A' },
-  //   { key: '2', value: '2' },
-  //   { key: '3', value: '3' },
-  //   { key: '4', value: '4' },
-  //   { key: '5', value: '5' },
-  //   { key: '6', value: '6' },
-  //   { key: '7', value: '7' },
-  //   { key: '8', value: '8' },
-  //   { key: '9', value: '9' },
-  //   { key: '10', value: '10' },
-  //   { key: '11', value: 'Jack' },
-  //   { key: '12', value: 'Queen' },
-  //   { key: '13', value: 'King' },
-  // ];
-
   const data = [
     { key: '1', value: 'A' },
     { key: '2', value: 'K' },
     { key: '3', value: 'Q' },
     { key: '4', value: 'J' },
-    { key: '5', value: 'T' },
+    { key: '5', value: '10' },
     { key: '6', value: '9' },
     { key: '7', value: '8' },
     { key: '8', value: '7' },
@@ -639,6 +617,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     height: 330,
     zIndex: 3,
+    position: "absolute",
     width: 160,
     backgroundColor: Color.whitesmoke,
     borderRadius: Border.br_sm,
