@@ -11,7 +11,7 @@ const StarterPage = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Poker AI</Text>
+      <Text style={styles.title}>Pocket Strategist</Text>
       <TouchableOpacity style={styles.button} onPress={handlePlayButton}>
         <Text style={styles.buttonText}>Play!</Text>
       </TouchableOpacity>
