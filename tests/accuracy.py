@@ -1,6 +1,11 @@
-from poker import PokerFlop, Player, get_action_from_input
-def accuracy_of_model(poker_Hands, position):
+# Accuracy tests of the optimal action for a given hand
+# Used to determine how accurate our calculations are vs GTO optimal play 
+# Returns the accuracy of the model for 3 different positions and the wrong predictions
 
+from poker import PokerFlop, Player, get_action_from_input
+
+def accuracy_of_model(poker_Hands, position):
+    incorrect_predictions = []
     correct = 0
     total = 0     
 
@@ -21,7 +26,14 @@ def accuracy_of_model(poker_Hands, position):
         if((action == 'RAISE' and poker_Hands[combos] == 1) or (action == 'FOLD' and poker_Hands[combos] == 0)):
             correct += 1
         else:
+            incorrect_predictions.append({
+                'hand': combos,
+                'predicted_action': action,
+                'actual_action': 'RAISE' if poker_Hands[combos] == 1 else 'FOLD'
+            })
             print(f"Wrong: {combos} {action}")
         total += 1
 
-    print(f"Accuracy: {correct * 100/total}%")  
+    accuracy = correct * 100 / total
+    print(f"Accuracy: {accuracy}%")
+    return incorrect_predictions, accuracy
