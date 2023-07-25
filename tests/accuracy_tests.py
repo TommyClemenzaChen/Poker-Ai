@@ -1,234 +1,258 @@
-from . import accuracy
+# This file contains the GTO data for the poker hands
+# Calls the accuracy.py file to get the accuracy of the calculated hands
+# Serves as an accuracy test for the program
 
+from .accuracy import accuracy_of_model
 
-poker_Hands = {}
+def display_results(results):
+    for position, result in results:
+        if result is not None:
+            incorrect_predictions, accuracy = result
+            print(f"=============================================")
+            print(f"{position.upper()} POSITION")
+            print(f"=============================================")
+            print("Incorrect Predictions:")
+            for pred in incorrect_predictions:
+                print(f"- {pred['hand']} was predicted to {pred['predicted_action'].upper()}, but should have {pred['actual_action'].upper()}")
+            print()
+            print(f"Overall Accuracy: {accuracy}%")
+            print()
+        else:
+            print(f"No results for {position}")
 
-cards = ['2','3','4','5','6','7','8','9','T','J','Q','K', 'A']
-n = len(cards)
+def main():
+    poker_Hands = {}
 
-# pairs
-for i in range(n):
+    cards = ['2','3','4','5','6','7','8','9','T','J','Q','K', 'A']
+    n = len(cards)
 
-    curr_hand = cards[i] + cards[i]
-    #Pairs
-        
-    #5 and up will be 1
-    if(i >= 3):
-        poker_Hands[curr_hand] = 1
-    else:
-        poker_Hands[curr_hand] = 0
+    # pairs
+    for i in range(n):
 
-
-
-# suited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
-
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 's'
-        
-        # Ace + 3 and higher
-        if(biggerCard == 'A' and smallerCard > '2'):
-            poker_Hands[curr_hand] = 1
+        curr_hand = cards[i] + cards[i]
+        #Pairs
             
-        # King + 6 and up
-        elif(biggerCard == 'K' and smallerCard >= '6'):
-            poker_Hands[curr_hand] = 1
-            
-        elif(biggerCard == 'Q' and smallerCard >= '9'):
-            poker_Hands[curr_hand] = 1
-        elif(biggerCard == 'J' and smallerCard >= '9'):
-            poker_Hands[curr_hand] = 1
-        elif(biggerCard == 'T' and smallerCard >= '9'):
+        #5 and up will be 1
+        if(i >= 3):
             poker_Hands[curr_hand] = 1
         else:
             poker_Hands[curr_hand] = 0
 
-# unsiuited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
 
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 'o'
-        
 
-        # Ace + 9 and higher
-        if(biggerCard == 'A' and smallerCard > '9'):
-            poker_Hands[curr_hand] = 1
+    # suited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
+
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 's'
             
-        elif(biggerCard == 'K' and (smallerCard == 'Q' or smallerCard == 'J')):
-            poker_Hands[curr_hand] = 1
-            #print(curr_hand)
-        else:
-            poker_Hands[curr_hand] = 0
+            # Ace + 3 and higher
+            if(biggerCard == 'A' and smallerCard > '2'):
+                poker_Hands[curr_hand] = 1
+                
+            # King + 6 and up
+            elif(biggerCard == 'K' and smallerCard >= '6'):
+                poker_Hands[curr_hand] = 1
+                
+            elif(biggerCard == 'Q' and smallerCard >= '9'):
+                poker_Hands[curr_hand] = 1
+            elif(biggerCard == 'J' and smallerCard >= '9'):
+                poker_Hands[curr_hand] = 1
+            elif(biggerCard == 'T' and smallerCard >= '9'):
+                poker_Hands[curr_hand] = 1
+            else:
+                poker_Hands[curr_hand] = 0
 
-# mid position ideal results
-mid_position_hands = {}
+    # unsiuited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
 
-#pairs
-for i in range(n):
-    curr_hand = cards[i] + cards[i]
-    
-    # all pairs should be raised
-    mid_position_hands[curr_hand] = 1
-
-# suited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
-
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 's'
-        
-        # if Ace is in hand, raise
-        if(biggerCard == 'A'):
-            mid_position_hands[curr_hand] = 1
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 'o'
             
-        # King + 4 or up raise
-        elif(biggerCard == 'K' and smallerCard >= '4'):
-            mid_position_hands[curr_hand] = 1
+
+            # Ace + 9 and higher
+            if(biggerCard == 'A' and smallerCard > '9'):
+                poker_Hands[curr_hand] = 1
+                
+            elif(biggerCard == 'K' and (smallerCard == 'Q' or smallerCard == 'J')):
+                poker_Hands[curr_hand] = 1
+                #print(curr_hand)
+            else:
+                poker_Hands[curr_hand] = 0
+
+    # mid position ideal results
+    mid_position_hands = {}
+
+    #pairs
+    for i in range(n):
+        curr_hand = cards[i] + cards[i]
+        
+        # all pairs should be raised
+        mid_position_hands[curr_hand] = 1
+
+    # suited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
+
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 's'
             
-        # queen + 6 or up raise
-        elif(biggerCard == 'Q' and smallerCard >= '6'):
-            mid_position_hands[curr_hand] = 1
-        
-        # jack + 7 or up raise
-        elif(biggerCard == 'J' and smallerCard >= '7'):
-            mid_position_hands[curr_hand] = 1
-
-        # ten + 7 or up raise
-        elif(biggerCard == 'T' and smallerCard >= '7'):
-            mid_position_hands[curr_hand] = 1
-
-        # 9 + 7 or up raise
-        elif(biggerCard == '9' and smallerCard >= '7'):
-            mid_position_hands[curr_hand] = 1
-
-        # 8 + 7 or up raise
-        elif(biggerCard == '8' and smallerCard >= '6'):
-            mid_position_hands[curr_hand] = 1
-
-        # 7 + 6 or up raise
-        elif(biggerCard == '7' and smallerCard >= '6'):
-            mid_position_hands[curr_hand] = 1
-        else:
-            mid_position_hands[curr_hand] = 0
-        
-        
-# unsuited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
-
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 'o'
-        
-
-        # Ace + 8 and higher, raise
-        if(biggerCard == 'A' and smallerCard >= '8'):
-            mid_position_hands[curr_hand] = 1
-        
-        # King + ten or higher, raise
-        elif(biggerCard == 'K' and smallerCard > '9'):
-            mid_position_hands[curr_hand] = 1
+            # if Ace is in hand, raise
+            if(biggerCard == 'A'):
+                mid_position_hands[curr_hand] = 1
+                
+            # King + 4 or up raise
+            elif(biggerCard == 'K' and smallerCard >= '4'):
+                mid_position_hands[curr_hand] = 1
+                
+            # queen + 6 or up raise
+            elif(biggerCard == 'Q' and smallerCard >= '6'):
+                mid_position_hands[curr_hand] = 1
             
-        # queen + ten or higher, raise
-        elif(biggerCard == 'Q' and smallerCard > '9'):
-            mid_position_hands[curr_hand] = 1
+            # jack + 7 or up raise
+            elif(biggerCard == 'J' and smallerCard >= '7'):
+                mid_position_hands[curr_hand] = 1
 
-        # jack + ten or higher, raise
-        elif(biggerCard == 'J' and smallerCard > '9'):
-            mid_position_hands[curr_hand] = 1
+            # ten + 7 or up raise
+            elif(biggerCard == 'T' and smallerCard >= '7'):
+                mid_position_hands[curr_hand] = 1
 
-        else:
-            mid_position_hands[curr_hand] = 0
+            # 9 + 7 or up raise
+            elif(biggerCard == '9' and smallerCard >= '7'):
+                mid_position_hands[curr_hand] = 1
+
+            # 8 + 7 or up raise
+            elif(biggerCard == '8' and smallerCard >= '6'):
+                mid_position_hands[curr_hand] = 1
+
+            # 7 + 6 or up raise
+            elif(biggerCard == '7' and smallerCard >= '6'):
+                mid_position_hands[curr_hand] = 1
+            else:
+                mid_position_hands[curr_hand] = 0
+            
+            
+    # unsuited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
+
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 'o'
+            
+
+            # Ace + 8 and higher, raise
+            if(biggerCard == 'A' and smallerCard >= '8'):
+                mid_position_hands[curr_hand] = 1
+            
+            # King + ten or higher, raise
+            elif(biggerCard == 'K' and smallerCard > '9'):
+                mid_position_hands[curr_hand] = 1
+                
+            # queen + ten or higher, raise
+            elif(biggerCard == 'Q' and smallerCard > '9'):
+                mid_position_hands[curr_hand] = 1
+
+            # jack + ten or higher, raise
+            elif(biggerCard == 'J' and smallerCard > '9'):
+                mid_position_hands[curr_hand] = 1
+
+            else:
+                mid_position_hands[curr_hand] = 0
+            
+    # Late position
+    late_position_hands = {}
+
+    #pairs
+    for i in range(n):
+        curr_hand = cards[i] + cards[i]
         
-# Late position
-late_position_hands = {}
+        # all pairs should be raised
+        late_position_hands[curr_hand] = 1
 
-#pairs
-for i in range(n):
-    curr_hand = cards[i] + cards[i]
-    
-    # all pairs should be raised
-    late_position_hands[curr_hand] = 1
+    # suited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
 
-# suited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 's'
+            
+            # if Ace, king or queen is in hand, raise
+            if(biggerCard in ['A', 'K', 'Q']): 
+                late_position_hands[curr_hand] = 1
+            
+            # jack + 4 or up raise
+            elif(biggerCard == 'J' and smallerCard >= '4'):
+                late_position_hands[curr_hand] = 1
 
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 's'
-        
-        # if Ace, king or queen is in hand, raise
-        if(biggerCard in ['A', 'K', 'Q']): 
-            late_position_hands[curr_hand] = 1
-        
-        # jack + 4 or up raise
-        elif(biggerCard == 'J' and smallerCard >= '4'):
-            late_position_hands[curr_hand] = 1
+            # (10, 9,8,7) + 5 or up raise
+            elif(biggerCard in ['T', '9', '8','7'] and smallerCard >= '5'):
+                late_position_hands[curr_hand] = 1
 
-        # (10, 9,8,7) + 5 or up raise
-        elif(biggerCard in ['T', '9', '8','7'] and smallerCard >= '5'):
-            late_position_hands[curr_hand] = 1
+            # (6,5) + 6 or up raise
+            elif(biggerCard in ['6','5'] and smallerCard >= '4'):
+                late_position_hands[curr_hand] = 1
+            else:
+                late_position_hands[curr_hand] = 0
 
-        # (6,5) + 6 or up raise
-        elif(biggerCard in ['6','5'] and smallerCard >= '4'):
-            late_position_hands[curr_hand] = 1
-        else:
-            late_position_hands[curr_hand] = 0
+    # unsuited hands
+    for i in range(1,n+1):
+        for j in range(i,n+1):
+            if(i == j): continue
 
-# unsuited hands
-for i in range(1,n+1):
-    for j in range(i,n+1):
-        if(i == j): continue
+            biggerCard, smallerCard = cards[i-1], cards[j-1]
+            if(i < j):
+                biggerCard, smallerCard = cards[j-1], cards[i-1]
+            curr_hand = biggerCard + smallerCard + 'o'
+            
 
-        biggerCard, smallerCard = cards[i-1], cards[j-1]
-        if(i < j):
-            biggerCard, smallerCard = cards[j-1], cards[i-1]
-        curr_hand = biggerCard + smallerCard + 'o'
-        
+            # Ace + 4 and higher, raise
+            if(biggerCard == 'A' and smallerCard >= '4'):
+                late_position_hands[curr_hand] = 1
+            
+            # King,queen + 9 or higher, raise
+            elif(biggerCard in ['K','Q'] and smallerCard >= '9'):
+                late_position_hands[curr_hand] = 1
 
-        # Ace + 4 and higher, raise
-        if(biggerCard == 'A' and smallerCard >= '4'):
-            late_position_hands[curr_hand] = 1
-        
-        # King,queen + 9 or higher, raise
-        elif(biggerCard in ['K','Q'] and smallerCard >= '9'):
-            late_position_hands[curr_hand] = 1
+            # (ten, 9) + 8 or higher, raise
+            elif(biggerCard in ['T','9'] and smallerCard >= '8'):
+                late_position_hands[curr_hand] = 1
 
-        # (ten, 9) + 8 or higher, raise
-        elif(biggerCard in ['T','9'] and smallerCard >= '8'):
-            late_position_hands[curr_hand] = 1
+            #(8) + 7 or higher, raise
+            elif(biggerCard == '8' and smallerCard >= '7'):
+                late_position_hands[curr_hand] = 1
+            else:
+                late_position_hands[curr_hand] = 0
+            
+            # Use this to test if the GTO data is correct
+            # if(late_position_hands[curr_hand] == 1 and biggerCard == 'J'):
+            #     print(curr_hand)
+    results = [
+        ("UTG", accuracy_of_model(poker_Hands, "UTG")),
+        ("Cut-off", accuracy_of_model(mid_position_hands, 'Cut-off')),
+        ("Small Blind", accuracy_of_model(late_position_hands, 'Small Blind'))
+    ]
 
-        #(8) + 7 or higher, raise
-        elif(biggerCard == '8' and smallerCard >= '7'):
-            late_position_hands[curr_hand] = 1
-        else:
-            late_position_hands[curr_hand] = 0
-        
-        # Use this to test if the GTO data is correct
-        # if(late_position_hands[curr_hand] == 1 and biggerCard == 'J'):
-        #     print(curr_hand)
+    display_results(results)
 
-
-# print(poker_Hands['KJo'])
-accuracy.accuracy_of_model(poker_Hands, "UTG")
-accuracy.accuracy_of_model(mid_position_hands, 'Cut-off')
-accuracy.accuracy_of_model(late_position_hands, 'Small Blind')
+if __name__ == "__main__":
+    main()
 
 
 

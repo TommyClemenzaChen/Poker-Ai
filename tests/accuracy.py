@@ -31,9 +31,7 @@ def accuracy_of_model(poker_Hands, position):
                 'predicted_action': action,
                 'actual_action': 'RAISE' if poker_Hands[combos] == 1 else 'FOLD'
             })
-            print(f"Wrong: {combos} {action}")
         total += 1
 
     accuracy = correct * 100 / total
-    print(f"Accuracy: {accuracy}%")
     return incorrect_predictions, accuracy
