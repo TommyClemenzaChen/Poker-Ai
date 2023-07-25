@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 42,
     fontWeight: 'bold',
     fontFamily: 'Plus Jakarta Sans_bold',
     color: 'white',
-    marginBottom: 50,
+    marginBottom: 100,
   },
   button: {
     backgroundColor: '#EABF6F',
