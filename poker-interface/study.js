@@ -98,18 +98,18 @@ const CustomInput = () => {
 
   // Button onPress method
   const handlePress_position = (buttonNumber) => {
-    setLastPressedButton(buttonNumber);
+      setLastPressedButton(buttonNumber);
 
-    // If the button number corresponds to D, SB, BB, 1, 2, or 3 then enable the "VIEW PREFLOP ADVICE" button
-    if ([1, 2, 3, 4, 5, 6].includes(buttonNumber)) {
-      if (selectedCard1 !== "" && selectedCard2 !== "") {
-        setViewButtonEnabled(true);
+      // If the button number corresponds to D, SB, BB, 1, 2, or 3 then enable the "VIEW PREFLOP ADVICE" button
+      if ([1, 2, 3, 4, 5, 6].includes(buttonNumber)) {
+        if (selectedCard1 !== "" && selectedCard2 !== "") {
+          setViewButtonEnabled(true);
+        } else {
+          setViewButtonEnabled(false);
+        }
       } else {
         setViewButtonEnabled(false);
       }
-    } else {
-      setViewButtonEnabled(false);
-    }
   };
   
   // View button
@@ -154,7 +154,11 @@ const CustomInput = () => {
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
             <SelectList 
-                    setSelected={(val) => {setSelectedCard1(val); if(val !== "" && selectedCard2 !== "") setViewButtonEnabled(true); else setViewButtonEnabled(false);}} 
+                    setSelected={(val) => {
+                          setSelectedCard1(val);
+                          if(val !== "" && selectedCard2 !== "" && lastPressedButton) setViewButtonEnabled(true);
+                          else setViewButtonEnabled(false);
+                      }} 
                     data={data} 
                     placeholder="Card 1"
                     search={false}
@@ -165,7 +169,11 @@ const CustomInput = () => {
                     dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
                 <SelectList 
-                    setSelected={(val) => {setSelectedCard2(val); if(val !== "" && selectedCard1 !== "") setViewButtonEnabled(true); else setViewButtonEnabled(false);}} 
+                    setSelected={(val) => {
+                        setSelectedCard2(val);
+                        if(val !== "" && selectedCard1 !== "" && lastPressedButton) setViewButtonEnabled(true);
+                        else setViewButtonEnabled(false);
+                    }} 
                     data={data} 
                     placeholder="Card 2"
                     search={false}
@@ -222,12 +230,6 @@ const CustomInput = () => {
             </View>
         </View>
     </View>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 831aa02f78e683634b79a9f898af6fda1dc0952b
-    
   );
 };
 
