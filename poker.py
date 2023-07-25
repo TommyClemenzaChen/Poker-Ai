@@ -12,8 +12,12 @@ class Action(Enum):
 Card class, encapsulates Card functionality
 '''
 class Card:
+    valid_suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+    valid_values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
     def __init__(self, suit, value):
+        assert suit in self.valid_suits, f"Invalid suit: {suit}"
+        assert value in self.valid_values, f"Invalid value: {value}"
         self.suit = suit
         self.value = value
 
@@ -21,7 +25,12 @@ class Card:
         return f"{self.value} of {self.suit}"
 
 class Player:
+    valid_positions = ['Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off', 'BTN']
+
     def __init__(self, name, chips=1000):
+        assert isinstance(name, str), f"Invalid name: {name}"
+        assert name, "Name cannot be empty"
+
         self.name = name
         self.hand = []
         self.chips = chips
@@ -37,6 +46,7 @@ class Player:
         self.hand = hand
 
     def set_position(self, position):
+        assert position in self.valid_positions, f"Invalid position: {position}"
         self.position = position
 
     def count_values(self):
@@ -314,6 +324,7 @@ def get_action_from_input(player_name, card1_value, card2_value, are_suited, pos
     # Create Card objects for the hand
     card1 = Card('Spades', card1_value)
     card2 = Card('Clubs', card2_value)
+
 
     if are_suited:
         # If the cards are suited, they should have the same suit
