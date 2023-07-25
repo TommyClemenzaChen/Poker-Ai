@@ -219,75 +219,7 @@ const CustomInput = () => {
         </View>
     </View>
 
-      /* <View style = {styles.heading}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
-            <Text style={styles.backButtonText}>{"<"}</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>Study Mode</Text>
-      </View> */
-      /* <View style={styles.inputContainer}>
-        <View style={styles.cardInput}>
-          <Text style={styles.cardInputTitle}>Select your cards</Text>
 
-          <View style={styles.dropdownWrapper}>
-            <View style={styles.dropdown}>
-              <SelectList
-                data={data}
-                setSelected={setCard1}
-                dropdownStyles={styles.dropdownStyles}
-                placeholder="Select a card"
-              />
-            </View>
-
-            <View style={styles.dropdown}>
-              <SelectList
-                data={data}
-                setSelected={setCard2}
-                dropdownStyles={styles.dropdownStyles}
-                placeholder="Select a card"
-              />
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.checkboxContainer}>
-          <Checkbox value={checked} onValueChange={checkTheBox} color="green" />
-          <Text style={styles.checkboxText}>Suited</Text>
-        </View>
-
-        <View style={styles.positionContainer}>
-          {positionData.map((pos, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.positionButton,
-                position === pos && styles.selectedPositionButton,
-              ]}
-              onPress={() => {
-                setPosition(pos);
-                console.log(pos);
-              }}
-            >
-              <Text
-                style={[
-                  styles.positionButtonText,
-                  position === pos && styles.selectedPositionButtonText,
-                ]}
-              >
-                {pos}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        
-
-        <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
-          <Text style={styles.submitButtonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    </View> 
-    */
     
   );
 };
