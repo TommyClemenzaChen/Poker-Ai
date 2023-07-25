@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 42,
     fontWeight: 'bold',
-    fontFamily: 'Plus Jakarta Sans_bold',
+    //fontFamily: 'Plus Jakarta Sans_bold',
     color: 'white',
     marginBottom: 100,
   },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: 'Plus Jakarta Sans_bold', // Set the font to cursive
+    //fontFamily: 'Plus Jakarta Sans_bold', // Set the font to cursive
   },
 });
 

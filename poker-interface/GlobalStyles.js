@@ -1,6 +1,6 @@
 /* fonts */
 export const FontFamily = {
-    plusJakartaSansBold: "Plus Jakarta Sans_bold",
+    TimesNewRoman: "Times New Roman",
   };
   /* font sizes */
   export const FontSize = {

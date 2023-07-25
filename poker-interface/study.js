@@ -356,7 +356,7 @@ const styles = StyleSheet.create({
     },
     card1Typo: {
     textAlign: "left",
-    fontFamily: "Plus Jakarta Sans_bold",
+    //FontFamily: "Times New Roman",
     fontWeight: "700"
     },
     suitedButtonSpaceBlock: {
@@ -466,14 +466,14 @@ const styles = StyleSheet.create({
     viewPreflopAdvice: {
     color: "#f0f0f0",
     textAlign: "center",
-    fontFamily: "Plus Jakarta Sans_bold",
+    //fontFamily: "Times New Roman",
     fontWeight: "700",
     fontSize: 18
     },
     disabledPreflopAdvice: {
       color: "#898989",
       textAlign: "center",
-      fontFamily: "Plus Jakarta Sans_bold",
+      //FontFamily: "Times New Roman",
       fontWeight: "700",
       fontSize: 18
       },
