@@ -20,6 +20,9 @@ const StarterPage = () => {
       {/* Display the title 'Poker AI' */}
       <Text style={styles.title}>Poker AI</Text>
       {/* Define the 'Play!' button. When it is pressed, the handlePlayButton function is called. */}
+      {/* Display the title 'Poker AI' /}
+      <Text style={styles.title}>Poker AI</Text>
+      {/ Define the 'Play!' button. When it is pressed, the handlePlayButton function is called. */}
       <Text style={styles.title}>Pocket Strategist</Text>
       <TouchableOpacity style={styles.button} onPress={handlePlayButton}>
         <Text style={styles.buttonText}>Play!</Text>
