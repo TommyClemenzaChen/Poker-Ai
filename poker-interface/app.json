@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "poker-interface",
+    "slug": "poker-interface",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/poker-cards.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/poker-cards.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
