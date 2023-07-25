@@ -152,7 +152,7 @@ class Player:
         return False
 
     def calculate_hand_strength(self):
-         """
+        """
          This function computes the hand strength of a particular hand. The hand strength is a number between 1 and 10, with 10 being the highest. 
 
          Returns:
@@ -160,6 +160,7 @@ class Player:
         """
         # Default hand strength is set to 0
         hand_strength = 0
+       
 
         # Check if the hand contains a pair
         if self.has_pair():
