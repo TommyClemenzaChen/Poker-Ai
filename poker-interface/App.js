@@ -2,8 +2,9 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import StarterPage from './starter';
 import customInput from './study';
-import ResultPage from './result';
+import Result from './fold';
 import {NavigationContainer} from "@react-navigation/native"
+import Raise from './raise';
  const Stack = createStackNavigator();
 
 export default function App() {
@@ -21,10 +22,16 @@ export default function App() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ResultPage"
-        component={ResultPage}
+        name="FoldPage"
+        component={Result}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="RaisePage"
+        component={Raise}
+        options={{ headerShown: false }}
+      />
+      
     </Stack.Navigator>
     </NavigationContainer>
   );

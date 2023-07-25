@@ -8,10 +8,7 @@ const StarterPage = () => {
     navigation.navigate('StudyPage'); // Navigate to the StudyPage screen
   };
 
-  const handleTrainButton = () => {
-    console.log('Train');
-    // Add logic for the "Train" button here -- route backend
-  };
+ 
 
   return (
     <View style={styles.container}>
@@ -19,9 +16,7 @@ const StarterPage = () => {
       <TouchableOpacity style={styles.button} onPress={handlePlayButton}>
         <Text style={styles.buttonText}>Play</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleTrainButton}>
-        <Text style={styles.buttonText}>Train</Text>
-      </TouchableOpacity>
+      
     </View>
   );
 };
