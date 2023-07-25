@@ -1,14 +1,18 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // <-- Import useNavigation
-const StarterPage = () => {
-  const navigation = useNavigation(); // <-- Get the navigation object
+import { useNavigation } from '@react-navigation/native';
 
+const StarterPage = () => {
+  const navigation = useNavigation();
   const handlePlayButton = () => {
-    navigation.navigate('StudyPage'); // Navigate to the StudyPage screen
+    console.log('Study');
+    navigation.navigate('StudyPage');
   };
 
- 
+  const handleTrainButton = () => {
+    console.log('Train');
+    // Add logic for the "Train" button here -- route backend
+  };
 
   return (
     <View style={styles.container}>
@@ -16,7 +20,9 @@ const StarterPage = () => {
       <TouchableOpacity style={styles.button} onPress={handlePlayButton}>
         <Text style={styles.buttonText}>Play</Text>
       </TouchableOpacity>
-      
+      <TouchableOpacity style={styles.button} onPress={handleTrainButton}>
+        <Text style={styles.buttonText}>Train</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -35,7 +41,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   button: {
-    backgroundColor: '#EABF6F',
+    backgroundColor: 'orange',
     borderRadius: 10,
     paddingVertical: 15,
     paddingHorizontal: 30,
