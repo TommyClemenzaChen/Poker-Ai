@@ -1,5 +1,4 @@
-# Poker-AI
-Poker
+# Pocket Strategist
 
 
 ## Files
@@ -27,7 +26,7 @@ set FLASK_APP=server.py
 flask run
 ```
 
-These commands will start the server running on localhost port 5000.
+These commands will start the server running on localhost.
 
 
 
