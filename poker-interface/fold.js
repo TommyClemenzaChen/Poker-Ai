@@ -24,12 +24,7 @@ const Result = () => {
         				</View>
         				<View style={[styles.back2, styles.backLayout]} />
       			</View>
-				<View>
-					<Text></Text>
-					<Text>
-						hello
-					</Text>
-				</View>
+				
       			<View style={[styles.frameParent, styles.buttonFlexBox]}>
         				<View style={[styles.frameWrapper, styles.wrapperFlexBox]}>
           					<View style={styles.foldWrapper}>

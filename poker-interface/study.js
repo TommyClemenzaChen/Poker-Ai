@@ -222,6 +222,11 @@ const CustomInput = () => {
             </View>
         </View>
     </View>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 831aa02f78e683634b79a9f898af6fda1dc0952b
     
   );
 };
