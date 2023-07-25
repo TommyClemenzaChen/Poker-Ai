@@ -152,105 +152,117 @@ class Player:
         return False
 
     def calculate_hand_strength(self):
-        """
-         This function computes the hand strength of a particular hand. The hand strength is a number between 1 and 10, with 10 being the highest. The hand strength is computed as follows:
-            - If the player has a pair, the hand strength is 10. If the pair is a premier pair, the hand strength is 10. If the pair is a high pair, the hand strength is 9. If the pair is a medium pair, the hand strength is 8. If the pair is a low pair, the hand strength is 7. If the pair is a very low pair, the hand strength is 6.
-            - If the player has two high cards that are suited, the hand strength is 7. If the player has two high cards that are off-suited, the hand strength is 5. If the player has two medium cards that are suited, the hand strength is 5. If the player has two medium cards that are off-suited, the hand strength is 3. If the player has a high card and a medium card that are suited, the hand strength is 5. If the player has a high card and a medium card that are off-suited, the hand strength is 3. If the player has a high card and a low card that are suited, the hand strength is 4. If the player has a high card and a low card that are off-suited, the hand strength is 2. If the player has two low cards that are suited, the hand strength is 3. If the player has two low cards that are off-suited, the hand strength is 1.
+         """
+         This function computes the hand strength of a particular hand. The hand strength is a number between 1 and 10, with 10 being the highest. 
 
          Returns:
          (int) The evaluated hand strength of the player's hand.
         """
+        # Default hand strength is set to 0
         hand_strength = 0
-        if self.has_pair():
-            pair_value = self.hand[0].value  # Since it's a pair, we can just take the value of the first card
-            if pair_value in self.premier_values:
-                hand_strength = 10
-            elif pair_value in self.high_values:
-                hand_strength = 9  # High pair
-            elif pair_value in self.medium_values:
-                hand_strength = 8  # Medium pair
-            elif pair_value in self.low_values:
-                hand_strength = 7  # Low pair
-            else:
-                hand_strength = 6 # Very low pair
 
+        # Check if the hand contains a pair
+        if self.has_pair():
+            # Since it's a pair, we can just take the value of the first card
+            pair_value = self.hand[0].value  
+                    
+            # Check the value of the pair and assign corresponding hand strength
+            if pair_value in self.premier_values: 
+                hand_strength = 10 # Premier Pair
+            elif pair_value in self.high_values:
+                hand_strength = 9  # High Pair
+            elif pair_value in self.medium_values:
+                hand_strength = 8  # Medium Pair
+            elif pair_value in self.low_values:
+                hand_strength = 7  # Low Pair
+            else:
+                hand_strength = 6 # Very Low pair
+
+        # If not a pair, check if it has double high cards
         elif self.has_double_high_card():
             hand_strength = 7
-
+        # Check if the hand is suited
         elif self.is_suited():
+            # Assign corresponding hand strength based on card values
+            # Higher values take precedence
             if self.has_premier_card():
                 hand_strength = 8
                 if(self.has_low_card()):
-                    hand_strength = 7 # Suited very low card
+                    hand_strength = 7 # Suited Premier Card + Low Card
                 elif(self.has_very_low_card()):
-                    hand_strength = 6 # Suited very low card
+                    hand_strength = 6 # Suited Premier Card + Very Low Card
             elif self.has_high_card():
-                hand_strength = 7  # Suited high card
+                hand_strength = 7  # Suited High Card
                 if(self.has_low_card()):
-                    hand_strength = 6 # Suited very low card
+                    hand_strength = 6 # Suited High Card + Low Card
                 elif(self.has_very_low_card()):
-                    hand_strength = 5 # Suited very low card
+                    hand_strength = 5 # Suited High Card + Very Low Card
             
             elif self.has_medium_card():
-                hand_strength = 5  # Suited medium card
+                hand_strength = 5  # Suited Medium Card
                 if(self.has_low_card()):
-                    hand_strength = 4 # Suited very low card
+                    hand_strength = 4 # Suited Medium Card + Low Card
                 elif(self.has_very_low_card()):
-                    hand_strength = 3 # Suited very low card
-                
+                    hand_strength = 3 # Suited Medium Card + Very Low Card
+
+            # Check if the suited hand has potential for a straight
             elif self.has_potential_straight():
-                if self.has_premier_card():
+                if self.has_premier_card(): # Suited Premier Card
                     hand_strength = 8
                 elif self.has_high_card():
-                    hand_strength = 7  # Suited high card
+                    hand_strength = 7  # Suited High Card
                 elif self.has_medium_card():
-                    hand_strength = 6 # Suited very low card
+                    hand_strength = 6 # Suited Very Low Card
                 elif self.has_low_card():
-                    hand_strength = 4  # Suited medium card
+                    hand_strength = 4  # Suited Medium Card
                 elif self.has_very_low_card():
                     if self.has_low_card():
-                        hand_strength = 4  # Suited medium card
+                        hand_strength = 4  # Suited Medium Card
                     else:
-                        hand_strength = 3  # Suited medium card
+                        hand_strength = 3  # Suited Medium Card
                 else:
-                    hand_strength = 3  # Suited low card
+                    hand_strength = 3  # Suited Low Card
             
             else:
-                hand_strength = 3  # Suited low card
-                
+                hand_strength = 3  # Suited Low Card
+        
+        # If not suited, check if there is potential for a straight
         elif self.has_potential_straight():
-            if self.has_premier_card():
+            if self.has_premier_card(): # Potential Premier straight
                 hand_strength = 8
             elif self.has_high_card():
-                hand_strength = 7  # Potential high straight
+                hand_strength = 7  # Potential High straight
             elif self.has_medium_card():
-                hand_strength = 4  # Potential medium straight
+                hand_strength = 4  # Potential Medium straight
             else:
-                hand_strength = 2  # Potential low straight
-
-        else: # off-suited high card starting hands
-            if self.has_premier_card():
+                hand_strength = 2  # Potential Low straight
+    
+    # If no specific conditions are met, assign hand strength based on card values
+        else: 
+            if self.has_premier_card(): # Has Premier Card 
                 hand_strength = 7
                 if(self.has_medium_card()):
-                    hand_strength = 6 # Has very low card
+                    hand_strength = 6 # Has Premier Card + Medium Card
                 elif(self.has_low_card()):
-                    hand_strength = 3 # Has very low card
+                    hand_strength = 3 # Has Premium Card + Low Card
                 elif(self.has_very_low_card()):
-                    hand_strength = 2 # Has very low card
+                    hand_strength = 2 # Has Premier Card + Very Low Card
             elif self.has_high_card():
-                hand_strength = 5  # High card
+                hand_strength = 5  # Has High Card
                 if(self.has_medium_card()):
-                    hand_strength = 4 # Has very low card
+                    hand_strength = 4 # Has High Card + Medium Card 
                 elif(self.has_low_card()):
-                    hand_strength = 3 # Has very low card
+                    hand_strength = 3 # Has High Card + Low Card
                 elif(self.has_very_low_card()):
-                    hand_strength = 2 # Has very low card
+                    hand_strength = 2 # Has High Card + Very Low Card
             elif self.has_medium_card():
-                hand_strength = 3  # Medium card
+                hand_strength = 3  # Has Medium Card
             else:
-                hand_strength = 1  # Low card
-
+                hand_strength = 1  # Has Low card
+     
+        # Return the evaluated hand strength
         return hand_strength
+
 
     def take_action(self, min_bet, pot_size):
         """
