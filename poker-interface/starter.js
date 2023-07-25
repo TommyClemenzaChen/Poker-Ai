@@ -1,17 +1,25 @@
+// Import necessary libraries and components from react, react-native and react-navigation.
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+// Define the StarterPage component. This is a functional component that renders the start page of your application.
 const StarterPage = () => {
+  // We use the useNavigation hook to be able to navigate to different screens in the application.
   const navigation = useNavigation();
 
+  // This function is called when the Play button is pressed.
+  // It navigates the user to the 'StudyPage' screen.
   const handlePlayButton = () => {
     navigation.navigate('StudyPage');
   };
 
+  // Here we define the UI of the StarterPage. It's a simple page with a title and a Play button.
   return (
     <View style={styles.container}>
+      {/* Display the title 'Poker AI' */}
       <Text style={styles.title}>Poker AI</Text>
+      {/* Define the 'Play!' button. When it is pressed, the handlePlayButton function is called. */}
       <TouchableOpacity style={styles.button} onPress={handlePlayButton}>
         <Text style={styles.buttonText}>Play!</Text>
       </TouchableOpacity>

@@ -1,4 +1,4 @@
-// import React from 'react';
+// importing the necessary libraries and components
 import React, {useState} from 'react';
 import { Image, Pressable, View, Text, StyleSheet, TouchableOpacity , Icon} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -6,16 +6,19 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Color, FontFamily, FontSize, Padding, Border } from "./GlobalStyles";
 
-
+// React component for the custom input
 const CustomInput = () => {
-
+  // hook to use naviation
   const navigation = useNavigation(); 
+  // possible position in a poker game
   const positionData = ['BTN', 'Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off'];
-  
+  // API instance creation
   const api = axios.create({
     baseURL: 'http://127.0.0.1:5000'
   });
+  // Function to send a POST request to the server and handle the response
   const handleSubmit = async (card1, card2, checked, position) => {
+    // Send POST request
     const res = await api.post('/get_optimal_action', {
       card1_value: card1,
       card2_value: card2,
@@ -24,37 +27,33 @@ const CustomInput = () => {
       position: position,
       min_bet: 10,
     });
-    
-  
-    
-  
+    // Check the status of the response
     if (res.status === 200) {
       console.log("Success");
     } else {
       console.log("Failure");
     }
-    
+    // Navigate to different pages based on the received data
     if(res.data["optimal_action"] === "FOLD"){
       navigation.navigate("FoldPage");
-      
     }else{
       navigation.navigate("RaisePage");
-      
     }
   };
-
+  // Function to navigate back to the starting page
   const handleBackButton = () => {
     navigation.navigate("StarterPage"); 
   }
+  // Function to submit user input
   const handlePress = async() => {
     // console.log('Submit');
     // console.log(data[selectedCard1-1].value);
     // console.log(data[selectedCard2-1].value);
     // console.log(suited);
     // console.log(positionData[lastPressedButton-1]);
-
     handleSubmit(data[selectedCard1-1].value, data[selectedCard2-1].value, suited, positionData[lastPressedButton-1]);
   };
+  // List of cards
   const data = [
     { key: '1', value: 'A' },
     { key: '2', value: 'K' },
@@ -70,31 +69,28 @@ const CustomInput = () => {
     { key: '12', value: '3' },
     { key: '13', value: '2' },
   ];
-
-  // Handle suited checkbox
+  // useState hooks to handle checkbox states
   const [suited, setSuited] = useState(false);
-
+  // Function to toggle suited checkbox
   const handleSuited = () => {
     setSuited(!suited);
   }
-
+  // Variable to store color based on suited status
   const suitedColor = suited ? '#8DD2C5' : '#F0F0F0';
-  
+  // Variable to store image source based on suited status
   const imageSource = suited 
       ? require('./images/checked.png') 
       : require('./images/unchecked.png');
   
-  // Handle dropdowns
+  // useState hooks to handle dropdown selection
   const [dropdown1Selected, setDropdown1] = useState("");
-
-  // Handle position buttons
+  // useState hook to handle button press
   const [lastPressedButton, setLastPressedButton] = useState(null);
 
-  // Button onPress method
+  // Function to handle position button press
   const handlePress_position = (buttonNumber) => {
       setLastPressedButton(buttonNumber);
-
-      // If the button number corresponds to D, SB, BB, 1, 2, or 3 then enable the "VIEW PREFLOP ADVICE" button
+      // Enable the "VIEW PREFLOP ADVICE" button if the conditions are met
       if ([1, 2, 3, 4, 5, 6].includes(buttonNumber)) {
         if (selectedCard1 !== "" && selectedCard2 !== "") {
           setViewButtonEnabled(true);
@@ -106,11 +102,12 @@ const CustomInput = () => {
       }
   };
   
-  // View button
+  // useState hook for enabling/disabling the view button
   const [isViewButtonEnabled, setViewButtonEnabled] = useState(false);
+  // Determine color based on button enabled state
   const string_color = isViewButtonEnabled ? "#f0f0f0" : "#898989";
 
-  // dropdown
+  // Dropdown configuration
   const dropdownItemHeight = 40; // Set this to the height of your dropdown items
   const maxDropdownHeight = 400; // Maximum dropdown height
 
@@ -121,32 +118,37 @@ const CustomInput = () => {
   // Calculate dropdown height based on data length
   const dropdownHeight = Math.min(data.length * dropdownItemHeight, maxDropdownHeight);
 
-  // functionality for diabling the "suited" button
+  // useState hooks to handle card selection
   const [selectedCard1, setSelectedCard1] = useState("");
   const [selectedCard2, setSelectedCard2] = useState("");
+  // Check if both cards are the same
   const areCardsSame = selectedCard1 === selectedCard2;
-  // const suitedColor = suited && !areCardsSame ? '#8DD2C5' : '#F0F0F0';
+  // Button style based on card and suited status
   const disabledButtonStyle = areCardsSame ? {backgroundColor: '#898989'} : {backgroundColor: suitedColor};
-
-
-
-
-  return (
+  
+// Begin the return statement of your component
+return (
     <View style={[styles.studyMode, styles.headerBg]}>
       <View style={[styles.header, styles.headerFlexBox]}>
+          {/* This TouchableOpacity navigates to the previous page when pressed. */}
           <TouchableOpacity style={[styles.back1, styles.backLayout]} onPress={handleBackButton}>
+                {/* Image component that shows the back icon. */}
           		  <Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
         	</TouchableOpacity>
           <View style={[styles.textHereWrapper, styles.parentFlexBox]}>
+              {/* Text component that displays 'Study Mode' */}
               <Text style={[styles.textHere1, styles.card1Typo]}>Study Mode</Text>
           </View>
           <View style={styles.backIcon1} />
       </View>
-
+    {/* A View component that holds some cards and other interactive elements. */}
     <View style={[styles.frameParent, styles.parentFlexBox]}>
         <View style={[styles.selectYourCardsParent, styles.parentFlexBox]}>
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
+            {/* View that contains dropdowns for card selection and a button to select if cards are suited. */}
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
+            {/* Two SelectList components that allow the user to select cards.
+            When a card is selected, it checks if both cards are selected and the last button was pressed. If so, it enables the View button. */}
             <SelectList 
                     setSelected={(val) => {
                           setSelectedCard1(val);
@@ -178,13 +180,16 @@ const CustomInput = () => {
                     dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
             </View>
+            {/* A TouchableOpacity component that handles the 'Suited' button. It is disabled if the selected cards are the same. */}
             <TouchableOpacity style={[styles.suitedButton, styles.cardDropdownFlexBox, disabledButtonStyle]} onPress={handleSuited} disabled={areCardsSame}>
                 <Text style={[styles.card1, styles.card1Typo]}>Suited</Text>
                 <Image style={styles.suitedButtonChild} resizeMode="cover" source={imageSource}/>
             </TouchableOpacity>
         </View>
+        {/* A View component that asks the user about their position. */}
         <View style={[styles.whatsYourPositionParent, styles.parentFlexBox]}>
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>What’s Your Position?</Text>
+                {/* A series of TouchableOpacities that each represent a player's position. */}
                 <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
                     <TouchableOpacity style={[lastPressedButton === 1 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(1)}>
                         <Text style={[styles.card1, styles.card1Typo]}>D</Text>
@@ -198,6 +203,7 @@ const CustomInput = () => {
                                 <Text style={[styles.card1, styles.card1Typo]}>BB</Text>
                             </TouchableOpacity>
                         </View>
+                        {/* A TouchableOpacity that leads to pre-flop advice. It is disabled if the 'View' button isn't enabled. */}
                         <TouchableOpacity 
                             style={[styles.viewButton, styles.viewSpaceBlock, !isViewButtonEnabled && styles.disabledButton]}
                             onPress={handlePress}
@@ -208,6 +214,7 @@ const CustomInput = () => {
                             >VIEW PREFLOP ADVICE
                             </Text>
                         </TouchableOpacity>
+                        {/* A series of TouchableOpacities that each represent a player's position. */}
                         <View style={[styles.frameView, styles.viewSpaceBlock]}>
                         <TouchableOpacity style={[lastPressedButton === 4 ? styles.coloredPlayer : styles.player, styles.playerSpaceBlock]} onPress={() => handlePress_position(4)}>
                             <Text style={[styles.card1, styles.card1Typo]}>3</Text>
