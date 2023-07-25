@@ -309,7 +309,7 @@ class PokerFlop:
         }
 
     def deal_cards(self):
-         """
+        """
          This function deals cards to a player. Each player is dealt two cards.
  
         """
