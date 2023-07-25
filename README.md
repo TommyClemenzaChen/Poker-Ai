@@ -1,11 +1,11 @@
-# Poker-Ai
+# Poker-AI
 Poker
 
 
 ## Files
-poker.py: This is the main file that contains the logic of the poker game and the poker bot. The PokerFlop class represents a game of poker, and the Player class represents a player in the game. The PokerFlop class includes methods for calculating the strength of a hand and determining the optimal action for a player. The Player class includes methods for setting a player's hand and position.
+poker.py: This is the main file that encapsulates the optimal action logic. The PokerFlop class represents a game of poker, and the Player class represents a player in the game. The PokerFlop class includes methods for calculating the strength of a hand and determining the optimal action for a player. The Player class includes methods for setting a player's hand and position. It is ultimately the Player class's take_action() function that computes the optimal action. 
 
-server.py: This file sets up a Flask web server that serves as the interface between the poker bot and the players. The server receives HTTP requests from the players, passes the relevant information to the poker bot, and sends back the bot's decisions as HTTP responses.
+server.py: This file sets up a Flask web server that serves as the interface between the backend and the frontend. The server receives HTTP requests from Axios in the React frontend,  passes the relevant information to the frontend based on the provided position and hand, and sends back the backend's optimal action with an associated explanation as a JSON response, which is used for subsequent processing in the frontend. 
 
 ## Running the server
 ```
