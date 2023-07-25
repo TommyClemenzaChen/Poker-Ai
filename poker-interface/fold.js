@@ -19,6 +19,7 @@ const Result = () => {
         				<TouchableOpacity style={[styles.back1, styles.backLayout]} onPress={handleBackButton}>
           					<Image style={[styles.icon, styles.iconLayout]} resizeMode="cover" source={require('./images/back.png')} />
         				</TouchableOpacity>
+						{/* Title on the top of the page */}
         				<View style={[styles.textHereWrapper, styles.wrapperFlexBox]}>
           					<Text style={[styles.textHere2, styles.foldTypo]}>Result</Text>
         				</View>
@@ -27,6 +28,7 @@ const Result = () => {
 				
       			<View style={[styles.frameParent, styles.buttonFlexBox]}>
         				<View style={[styles.frameWrapper, styles.wrapperFlexBox]}>
+							{/* Text representing the result */}
           					<View style={styles.foldWrapper}>
             						<Text style={[styles.fold, styles.foldTypo]}>Fold</Text>
           					</View>
@@ -40,6 +42,7 @@ const Result = () => {
 							/>
 							
 						</View>
+						{/* Button to view explanation for hand, but we weren't able to implement*/}
         				<Pressable style={[styles.button, styles.emojiSpaceBlock]} onPress={()=>{}}>
           					<Text style={styles.textHere3}>View Details</Text>
         				</Pressable>
