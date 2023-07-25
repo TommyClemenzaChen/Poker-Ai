@@ -1,4 +1,4 @@
-import poker
+from poker import PokerFlop, Player, get_action_from_input
 def accuracy_of_model(poker_Hands, position):
 
     correct = 0
@@ -16,7 +16,7 @@ def accuracy_of_model(poker_Hands, position):
             suited = False
 
         #Gets the action from the input
-        action = poker.get_action_from_input("test", card1, card2, suited, position, 100)[0]['player_states']['test']['action']
+        action = get_action_from_input("test", card1, card2, suited, position, 100)[0]['player_states']['test']['action']
         
         if((action == 'RAISE' and poker_Hands[combos] == 1) or (action == 'FOLD' and poker_Hands[combos] == 0)):
             correct += 1

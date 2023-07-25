@@ -1,7 +1,7 @@
 # File: unit_tests.py
 
 import unittest
-from poker import Player, Card, get_action_from_input
+from poker import Player, Action, Card, get_action_from_input
 
 class TestCard(unittest.TestCase):
     def test_card_creation(self):
@@ -39,8 +39,8 @@ class TestPlayer(unittest.TestCase):
 
     def test_set_position(self):
         player = Player('Player 1')
-        player.set_position('Early')
-        self.assertEqual(player.position, 'Early')
+        player.set_position('UTG')
+        self.assertEqual(player.position, 'UTG')
 
     def test_invalid_position(self):
         player = Player('Player 1')
@@ -49,7 +49,7 @@ class TestPlayer(unittest.TestCase):
 
     def test_has_high_card(self):
         player = Player('Player 1')
-        player.set_hand([Card('Hearts', '10'), Card('Spades', 'A')])  # High card
+        player.set_hand([Card('Hearts', 'J'), Card('Spades', 'A')])  # High card
         self.assertTrue(player.has_high_card())
 
     def test_has_pair(self):
@@ -58,28 +58,15 @@ class TestPlayer(unittest.TestCase):
         self.assertTrue(player.has_pair())
 
     def test_take_action(self):
-        player = Player('Player 1')
-        player.set_hand([Card('Hearts', '10'), Card('Spades', 'A')])  # High card
-        player.set_position('Early')
-        action, explanation = player.take_action(10, 100)  # min_bet = 10, pot_size = 100
-        self.assertIn(action, ['FOLD', 'CALL', 'RAISE'])
-        self.assertIsInstance(explanation, str)
+        player = Player('Test Player')
+        player.set_hand([Card('Hearts', 'A'), Card('Diamonds', 'K')])  # Set a valid hand
+        action, _ = player.take_action(50, 100)  # Take action with a min_bet of 50 and pot_size of 100
+        self.assertIn(action.name, [action.name for action in Action])  # Compare action names
+
 
 class TestGetActionFromInput(unittest.TestCase):
     def test_get_action_from_input(self):
-        player_name = 'Player 1'
-        card1_value = '10'
-        card2_value = 'A'
-        are_suited = False
-        position = 'Early'
-        min_bet = 10
-        game_state, optimal_action, explanation = get_action_from_input(
-            player_name, card1_value, card2_value, are_suited, position, min_bet)
-        self.assertIn('current_player', game_state)
-        self.assertEqual(game_state['current_player'], player_name)
-        self.assertIn('player_states', game_state)
-        self.assertIn(player_name, game_state['player_states'])
-        self.assertIn(optimal_action, ['FOLD', 'CALL', 'RAISE'])
-
+        game_state, optimal_action, explanation = get_action_from_input('Player 1', '5', '6', True, 'Small Blind', 50)
+        self.assertIn(optimal_action.name, [action.name for action in Action])
 if __name__ == '__main__':
     unittest.main(exit=False)

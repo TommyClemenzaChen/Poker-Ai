@@ -1,4 +1,4 @@
-import accuracy
+from . import accuracy
 
 
 poker_Hands = {}
