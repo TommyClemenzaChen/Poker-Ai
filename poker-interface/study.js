@@ -7,11 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { Color, FontFamily, FontSize, Padding, Border } from "./GlobalStyles";
 
 
-
-const showOptimalAction = (action) => {
-  alert(action["optimal_action"]);
-};
-
 const CustomInput = () => {
 
   const navigation = useNavigation(); 
@@ -31,8 +26,7 @@ const CustomInput = () => {
     });
     
   
-    console.log(res.data);
-    showOptimalAction(res.data);
+    
   
     if (res.status === 200) {
       console.log("Success");
@@ -53,11 +47,11 @@ const CustomInput = () => {
     navigation.navigate("StarterPage"); 
   }
   const handlePress = async() => {
-    console.log('Submit');
-    console.log(data[selectedCard1-1].value);
-    console.log(data[selectedCard2-1].value);
-    console.log(suited);
-    console.log(positionData[lastPressedButton-1]);
+    // console.log('Submit');
+    // console.log(data[selectedCard1-1].value);
+    // console.log(data[selectedCard2-1].value);
+    // console.log(suited);
+    // console.log(positionData[lastPressedButton-1]);
 
     handleSubmit(data[selectedCard1-1].value, data[selectedCard2-1].value, suited, positionData[lastPressedButton-1]);
   };
@@ -338,7 +332,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 40,
     marginBottom: 50,
-    //justifyContent: 'space-between',
+   
   },
   
   headerBg: {
