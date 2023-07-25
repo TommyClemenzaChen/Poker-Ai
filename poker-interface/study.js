@@ -2,35 +2,11 @@
 import React, {useState} from 'react';
 import { Image, Pressable, View, Text, StyleSheet, TouchableOpacity , Icon} from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
-import Checkbox from 'expo-checkbox';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { Color, FontFamily, FontSize, Padding, Border } from "./GlobalStyles";
 
-const api = axios.create({
-  baseURL: 'http://127.0.0.1:5000'
-});
-const handleSubmit = async (card1, card2, checked, position) => {
-  const res = await api.post('/get_optimal_action', {
-    card1_value: card1,
-    card2_value: card2,
-    are_suited: checked,
-    player_name: 'Bob',
-    position: position,
-    min_bet: 10,
-  });
-  
 
-  console.log(res.data);
-  showOptimalAction(res.data);
-
-  if (res.status === 200) {
-    console.log("Success");
-  } else {
-    console.log("Failure");
-  }
-  
-};
 
 const showOptimalAction = (action) => {
   alert(action["optimal_action"]);
@@ -39,56 +15,58 @@ const showOptimalAction = (action) => {
 const CustomInput = () => {
 
   const navigation = useNavigation(); 
-  const [card1, setCard1] = React.useState('');
-  const [card2, setCard2] = React.useState('');
-  const [checked, checkTheBox] = React.useState(false);
-  const [position, setPosition] = React.useState('');
-  const positionData = ['SB', 'BB', '1', '2', '3', 'D'];
+  const positionData = ['BTN', 'Small Blind', 'Big Blind', 'UTG', 'Hijack', 'Cut-off'];
   
+  const api = axios.create({
+    baseURL: 'http://127.0.0.1:5000'
+  });
+  const handleSubmit = async (card1, card2, checked, position) => {
+    const res = await api.post('/get_optimal_action', {
+      card1_value: card1,
+      card2_value: card2,
+      are_suited: checked,
+      player_name: 'Bob',
+      position: position,
+      min_bet: 10,
+    });
+    
+  
+    console.log(res.data);
+    showOptimalAction(res.data);
+  
+    if (res.status === 200) {
+      console.log("Success");
+    } else {
+      console.log("Failure");
+    }
+    
+    if(res.data["optimal_action"] === "FOLD"){
+      navigation.navigate("FoldPage");
+      
+    }else{
+      navigation.navigate("RaisePage");
+      
+    }
+  };
+
   const handleBackButton = () => {
     navigation.navigate("StarterPage"); 
   }
   const handlePress = async() => {
     console.log('Submit');
-    const rest = await api.post('/get_optimal_action');
-    const opt = rest.data["optimal_action"]; 
-    navigation.navigate("ResultPage", {opt});
-    
-    alert(
-      data.find((item) => item.key === selectedCard1)?.value +
-        "," +
-        data.find((item) => item.key === selectedCard2)?.value +
-        "\n" +
-        position +
-        "\n" +
-        (checked ? "suited" : "not suited")
-    );
+    console.log(data[selectedCard1-1].value);
+    console.log(data[selectedCard2-1].value);
+    console.log(suited);
+    console.log(positionData[lastPressedButton-1]);
 
-    handleSubmit(selectedCard1, selectedCard2, checked, position);
+    handleSubmit(data[selectedCard1-1].value, data[selectedCard2-1].value, suited, positionData[lastPressedButton-1]);
   };
-
-  // const data = [
-  //   { key: '1', value: 'A' },
-  //   { key: '2', value: '2' },
-  //   { key: '3', value: '3' },
-  //   { key: '4', value: '4' },
-  //   { key: '5', value: '5' },
-  //   { key: '6', value: '6' },
-  //   { key: '7', value: '7' },
-  //   { key: '8', value: '8' },
-  //   { key: '9', value: '9' },
-  //   { key: '10', value: '10' },
-  //   { key: '11', value: 'Jack' },
-  //   { key: '12', value: 'Queen' },
-  //   { key: '13', value: 'King' },
-  // ];
-
   const data = [
     { key: '1', value: 'A' },
     { key: '2', value: 'K' },
     { key: '3', value: 'Q' },
     { key: '4', value: 'J' },
-    { key: '5', value: 'T' },
+    { key: '5', value: '10' },
     { key: '6', value: '9' },
     { key: '7', value: '8' },
     { key: '8', value: '7' },
@@ -124,8 +102,12 @@ const CustomInput = () => {
 
     // If the button number corresponds to D, SB, BB, 1, 2, or 3 then enable the "VIEW PREFLOP ADVICE" button
     if ([1, 2, 3, 4, 5, 6].includes(buttonNumber)) {
-      setViewButtonEnabled(true);
-    }else {
+      if (selectedCard1 !== "" && selectedCard2 !== "") {
+        setViewButtonEnabled(true);
+      } else {
+        setViewButtonEnabled(false);
+      }
+    } else {
       setViewButtonEnabled(false);
     }
   };
@@ -172,7 +154,7 @@ const CustomInput = () => {
             <Text style={[styles.selectYourCards1, styles.card1Typo]}>Select Your Cards</Text>
             <View style={[styles.cardDropdownParent, styles.suitedButtonSpaceBlock]}>
             <SelectList 
-                    setSelected={(val) => setSelectedCard1(val)} 
+                    setSelected={(val) => {setSelectedCard1(val); if(val !== "" && selectedCard2 !== "") setViewButtonEnabled(true); else setViewButtonEnabled(false);}} 
                     data={data} 
                     placeholder="Card 1"
                     search={false}
@@ -183,7 +165,7 @@ const CustomInput = () => {
                     dropdownStyles={{backgroundColor: "#f0f0f0", minWidth, maxWidth}}
                 />
                 <SelectList 
-                    setSelected={(val) => setSelectedCard2(val)} 
+                    setSelected={(val) => {setSelectedCard2(val); if(val !== "" && selectedCard1 !== "") setViewButtonEnabled(true); else setViewButtonEnabled(false);}} 
                     data={data} 
                     placeholder="Card 2"
                     search={false}
@@ -240,76 +222,6 @@ const CustomInput = () => {
             </View>
         </View>
     </View>
-
-      /* <View style = {styles.heading}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackButton}>
-            <Text style={styles.backButtonText}>{"<"}</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>Study Mode</Text>
-      </View> */
-      /* <View style={styles.inputContainer}>
-        <View style={styles.cardInput}>
-          <Text style={styles.cardInputTitle}>Select your cards</Text>
-
-          <View style={styles.dropdownWrapper}>
-            <View style={styles.dropdown}>
-              <SelectList
-                data={data}
-                setSelected={setCard1}
-                dropdownStyles={styles.dropdownStyles}
-                placeholder="Select a card"
-              />
-            </View>
-
-            <View style={styles.dropdown}>
-              <SelectList
-                data={data}
-                setSelected={setCard2}
-                dropdownStyles={styles.dropdownStyles}
-                placeholder="Select a card"
-              />
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.checkboxContainer}>
-          <Checkbox value={checked} onValueChange={checkTheBox} color="green" />
-          <Text style={styles.checkboxText}>Suited</Text>
-        </View>
-
-        <View style={styles.positionContainer}>
-          {positionData.map((pos, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[
-                styles.positionButton,
-                position === pos && styles.selectedPositionButton,
-              ]}
-              onPress={() => {
-                setPosition(pos);
-                console.log(pos);
-              }}
-            >
-              <Text
-                style={[
-                  styles.positionButtonText,
-                  position === pos && styles.selectedPositionButtonText,
-                ]}
-              >
-                {pos}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        
-
-        <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
-          <Text style={styles.submitButtonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
-    </View> 
-    */
     
   );
 };
@@ -639,6 +551,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     height: 330,
     zIndex: 3,
+    position: "absolute",
     width: 160,
     backgroundColor: Color.whitesmoke,
     borderRadius: Border.br_sm,
