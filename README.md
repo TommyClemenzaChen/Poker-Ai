@@ -22,8 +22,7 @@ flask run
 
 Windows:
 ```
-set FLASK_APP=server.py
-flask run
+flask --app server.py run
 ```
 
 These commands will start the server running on localhost.
