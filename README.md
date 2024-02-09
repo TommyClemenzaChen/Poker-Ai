@@ -24,6 +24,11 @@ Windows:
 ```
 flask --app server.py run
 ```
+Make a new bash terminal and run:
+```
+cd pker-interface/
+npm start
+```
 
 These commands will start the server running on localhost.
 
