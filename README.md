@@ -26,7 +26,7 @@ flask --app server.py run
 ```
 Make a new bash terminal and run:
 ```
-cd pker-interface/
+cd poker-interface/
 npm start
 ```
 
